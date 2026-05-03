@@ -1,0 +1,3040 @@
+<html lang="vi"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hôm Nay Ăn Gì?</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #e8590c;
+  --orange-light: #fff4ee;
+  --orange-mid: #fde8d8;
+  --green: #2d9e5f;
+  --green-light: #e8f5ed;
+  --text: #18181b;
+  --text-muted: #71717a;
+  --bg: #fdf4ee;
+  --white: #ffffff;
+  --border: rgba(0,0,0,0.10);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(180,80,20,0.08);
+  --shadow-lg: 0 12px 40px rgba(180,80,20,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit}
+
+/* ===== AUTH OVERLAY ===== */
+#auth-overlay{position:fixed;inset:0;z-index:1000;display:flex}
+.auth-left{width:min(480px,48%);background:#fff;display:flex;flex-direction:column;justify-content:center;padding:52px 48px;overflow-y:auto;position:relative}
+.auth-left-inner{width:100%;max-width:360px}
+.auth-brand{display:flex;align-items:center;gap:10px;margin-bottom:36px}
+.auth-brand-icon{width:40px;height:40px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.auth-brand-name{font-size:1.25rem;font-weight:900;letter-spacing:-.5px}
+.auth-brand-name span{color:var(--orange)}
+.auth-heading{font-size:1.6rem;font-weight:900;letter-spacing:-.5px;margin-bottom:6px;line-height:1.2}
+.auth-heading-sub{color:var(--text-muted);font-size:.88rem;margin-bottom:28px}
+.auth-tabs{display:flex;background:#f3f4f6;border-radius:10px;padding:4px;gap:4px;margin-bottom:24px}
+.auth-tab{flex:1;padding:9px;text-align:center;font-weight:700;font-size:.88rem;color:var(--text-muted);cursor:pointer;border-radius:7px;transition:.2s}
+.auth-tab.active{background:#fff;color:var(--orange);box-shadow:0 1px 6px rgba(0,0,0,.1)}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.78rem;font-weight:700;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.92rem;outline:none;transition:.2s;background:#fafafa;color:var(--text)}
+.form-group input:focus,.form-group select:focus{border-color:var(--orange);background:#fff;box-shadow:0 0 0 3px rgba(232,89,12,.08)}
+.btn-auth{width:100%;padding:13px;background:var(--orange);color:white;border:none;border-radius:var(--radius-sm);font-size:.95rem;font-weight:800;margin-top:4px;transition:.2s;letter-spacing:.02em}
+.btn-auth:hover{background:#c94a09;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,89,12,.35)}
+.auth-err{color:#dc2626;font-size:.82rem;text-align:center;margin-top:8px;display:none}
+.auth-switch{text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:18px}
+.auth-switch a{color:var(--orange);font-weight:700;cursor:pointer;text-decoration:none}
+.auth-switch a:hover{text-decoration:underline}
+
+/* Auth right panel */
+.auth-right{flex:1;background:linear-gradient(150deg,#1a0800 0%,#6b2000 45%,#c94a09 100%);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.auth-right-deco{position:absolute;inset:0;pointer-events:none}
+.auth-right-deco span{position:absolute;font-size:6rem;opacity:.07;animation:floatDeco 8s ease-in-out infinite}
+.auth-right-deco span:nth-child(1){top:8%;left:10%;animation-delay:0s;font-size:7rem}
+.auth-right-deco span:nth-child(2){top:20%;right:8%;animation-delay:1.2s;font-size:5rem}
+.auth-right-deco span:nth-child(3){bottom:25%;left:6%;animation-delay:2.4s}
+.auth-right-deco span:nth-child(4){bottom:12%;right:12%;animation-delay:3.6s;font-size:8rem}
+.auth-right-deco span:nth-child(5){top:50%;left:40%;animation-delay:1.8s;font-size:4rem}
+.auth-right-deco span:nth-child(6){top:35%;left:20%;animation-delay:0.6s;font-size:5.5rem}
+@keyframes floatDeco{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(6deg)}}
+.auth-right-content{position:relative;z-index:1;text-align:center;padding:40px;max-width:400px}
+.auth-right-emoji{font-size:4.5rem;margin-bottom:20px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4))}
+.auth-right-title{font-size:2rem;font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.2;margin-bottom:12px}
+.auth-right-title em{font-style:italic;color:#ffd4a8}
+.auth-right-desc{color:rgba(255,255,255,.65);font-size:.92rem;line-height:1.6;margin-bottom:28px}
+.auth-right-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.auth-right-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:.78rem;font-weight:700;padding:6px 14px;border-radius:99px;backdrop-filter:blur(4px)}
+@media(max-width:700px){.auth-right{display:none}.auth-left{width:100%;padding:32px 24px}}
+
+/* ===== NAV ===== */
+nav{background:#0f172a;border-bottom:none;position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:0;padding:0 20px;height:52px}
+.logo{font-size:1.05rem;font-weight:800;letter-spacing:-.3px;display:flex;align-items:center;gap:8px;color:white;margin-right:32px;flex-shrink:0}
+.logo-icon{width:28px;height:28px;background:var(--orange);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.logo span{color:var(--orange)}
+.nav-divider{width:1px;height:20px;background:rgba(255,255,255,.12);margin:0 16px;flex-shrink:0}
+.nav-menu{display:flex;gap:4px;align-items:center}
+.nav-btn{padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;transition:.15s;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:rgba(255,255,255,.75)}
+.nav-btn:hover{background:rgba(255,255,255,.14);color:white;border-color:rgba(255,255,255,.25)}
+.nav-btn.fill{background:var(--orange);color:white;border-color:var(--orange)}
+.nav-btn.fill:hover{background:#c94a09;border-color:#c94a09}
+.nav-user{display:none;align-items:center;gap:8px}
+.user-avatar{width:30px;height:30px;border-radius:6px;background:var(--orange);color:white;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center}
+.user-name{font-weight:600;font-size:.82rem;color:rgba(255,255,255,.85)}
+.nav-page-btns{display:flex;gap:0;align-items:stretch;height:52px}
+.page-btn{padding:0 16px;font-size:.82rem;font-weight:600;border:none;background:none;color:rgba(255,255,255,.55);transition:.15s;cursor:pointer;position:relative;font-family:inherit}
+.page-btn::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--orange);border-radius:2px 2px 0 0;transition:.2s}
+.page-btn.active{color:white}
+.page-btn.active::after{width:calc(100% - 20px)}
+.page-btn:hover:not(.active){color:rgba(255,255,255,.85)}
+.nav-spacer{flex:1}
+.nav-btn.admin-btn{background:#1e3a5f;border-color:#2563eb;color:#93c5fd}
+.nav-btn.admin-btn:hover{background:#1d4ed8;border-color:#1d4ed8;color:white}
+
+/* ===== FILTER BAR ===== */
+.filter-bar{background:white;border-bottom:1.5px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:52px;position:sticky;top:52px;z-index:90}
+.filter-search{display:flex;align-items:center;gap:8px;border:1.5px solid var(--border);border-radius:6px;padding:0 12px;height:34px;background:white;transition:.2s;min-width:200px}
+.filter-search:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px rgba(232,89,12,.1)}
+.filter-search svg{flex-shrink:0;opacity:.4}
+.filter-search input{border:none;outline:none;font-size:.83rem;font-family:inherit;color:var(--text);width:160px;background:transparent}
+.filter-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 4px}
+.filter-label{font-size:.73rem;font-weight:700;color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;flex-shrink:0}
+.cat-row{display:flex;gap:6px;overflow-x:auto;padding:10px 0;flex:1;scrollbar-width:none}
+.cat-row::-webkit-scrollbar{display:none}
+.cat{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:4px;border:1px solid transparent;font-size:.78rem;font-weight:600;color:#44464f;background:#f1f3f5;transition:.15s;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.cat::before{content:'';width:8px;height:8px;border-radius:50%;background:#cbd5e1;flex-shrink:0;transition:.15s}
+.cat:hover{background:#e2e5e8;color:var(--text)}
+.cat.active{background:#fff0e8;border-color:#f97316;color:#c2410c;font-weight:700}
+.cat.active::before{background:var(--orange)}
+.filter-count{font-size:.78rem;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-left:auto;white-space:nowrap;background:#f1f3f5;padding:4px 10px;border-radius:4px}
+.filter-clear{font-size:.75rem;font-weight:700;color:var(--orange);cursor:pointer;padding:4px 10px;border-radius:4px;border:1px solid var(--orange-mid);background:var(--orange-light);flex-shrink:0;transition:.15s;white-space:nowrap}
+.filter-clear:hover{background:var(--orange);color:white}
+
+/* ===== PAGES ===== */
+.page{display:none;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== HOME PAGE ===== */
+.hero{background:linear-gradient(135deg,#1c0800 0%,#5c1d00 40%,#b84208 75%,#e8590c 100%);padding:64px 24px 72px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:28px 28px}
+.hero::after{content:'🍜';position:absolute;right:3%;bottom:-8%;font-size:22rem;opacity:.07;line-height:1;pointer-events:none;filter:blur(2px)}
+.hero-inner{max-width:1200px;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:space-between;gap:40px}
+.hero-left{flex:1;max-width:560px}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);color:#ffd4a8;font-size:.72rem;font-weight:800;padding:6px 16px;border-radius:99px;border:1px solid rgba(255,255,255,.2);margin-bottom:20px;letter-spacing:.1em;backdrop-filter:blur(4px)}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:900;color:white;line-height:1.08;letter-spacing:-2px;margin-bottom:14px}
+.hero h1 em{font-style:italic;color:#ffd4a8}
+.hero p{color:rgba(255,255,255,.65);font-size:.95rem;margin-bottom:28px;line-height:1.65}
+.hero-right{flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;opacity:.9}
+.hero-mini-card{background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px;text-align:center;color:white}
+.hero-mini-card:nth-child(1){grid-column:1/-1;display:flex;align-items:center;gap:12px;text-align:left}
+.hmc-emoji{font-size:2rem}
+.hmc-name{font-size:.82rem;font-weight:700;margin-bottom:2px}
+.hmc-price{font-size:.72rem;color:rgba(255,255,255,.65)}
+.hmc-label{font-size:.65rem;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 8px;margin-top:4px;display:inline-block;font-weight:700;letter-spacing:.04em}
+@media(max-width:900px){.hero-right{display:none}.hero-inner{display:block}}
+
+.stats-row{background:white;border-bottom:1px solid var(--border)}
+.stats-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;gap:0;flex-wrap:wrap}
+.stat-it{display:flex;align-items:center;gap:8px;font-size:.83rem;color:var(--text-muted);padding:15px 32px 15px 0;font-weight:600}
+.stat-it:not(:last-child){border-right:1px solid var(--border);margin-right:32px}
+.stat-n{font-weight:800;color:var(--orange);font-size:.95rem}
+
+.main-content{max-width:1400px;margin:0 auto;padding:24px 24px;display:flex;gap:20px;align-items:flex-start}
+.sidebar-filter{width:220px;flex-shrink:0;background:#fff;border:1px solid #e4e7ec;border-radius:10px;overflow:hidden;position:sticky;top:108px}
+.sf-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f1f3f5}
+.sf-head-title{font-size:.82rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#374151}
+.sf-clear{font-size:.72rem;font-weight:700;color:var(--orange);cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid var(--orange-mid);background:var(--orange-light);transition:.15s}
+.sf-clear:hover{background:var(--orange);color:white}
+.sf-section{border-bottom:1px solid #f1f3f5}
+.sf-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;cursor:pointer;user-select:none}
+.sf-section-hdr:hover{background:#fafafa}
+.sf-section-label{font-size:.78rem;font-weight:700;color:#374151}
+.sf-arrow{font-size:.65rem;color:#9ca3af;transition:.2s}
+.sf-section.collapsed .sf-arrow{transform:rotate(-90deg)}
+.sf-section.collapsed .sf-body{display:none}
+.sf-body{padding:6px 16px 12px}
+.sf-opt{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer}
+.sf-opt input[type=checkbox]{width:14px;height:14px;accent-color:var(--orange);cursor:pointer;flex-shrink:0}
+.sf-opt-label{font-size:.78rem;color:#374151;font-weight:500;flex:1}
+.sf-opt-count{font-size:.68rem;color:#9ca3af;font-weight:600;background:#f3f4f6;padding:1px 6px;border-radius:3px}
+.sf-opt:hover .sf-opt-label{color:var(--orange)}
+.sf-range{display:flex;flex-direction:column;gap:6px}
+.sf-range input[type=range]{width:100%;accent-color:var(--orange);cursor:pointer}
+.sf-range-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted);font-weight:600}
+.content-main{flex:1;min-width:0}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.sec-title{font-size:1.2rem;font-weight:900;letter-spacing:-.4px;display:flex;align-items:center;gap:8px}
+.sec-title::before{content:'';display:inline-block;width:4px;height:18px;background:var(--orange);border-radius:99px}
+.sec-more{color:var(--orange);font-size:.82rem;font-weight:700;cursor:pointer;padding:6px 12px;border-radius:8px;border:1px solid var(--orange-mid);background:var(--orange-light);transition:.2s}
+.sec-more:hover{background:var(--orange);color:white}
+
+/* Category chips */
+.cat-row{display:flex;gap:8px;overflow-x:auto;margin-bottom:28px;padding-bottom:2px;scrollbar-width:none}
+.cat-row::-webkit-scrollbar{display:none}
+.cat{padding:8px 18px;border-radius:99px;border:1.5px solid var(--border);font-size:.83rem;font-weight:700;color:var(--text-muted);background:white;transition:.2s;cursor:pointer;white-space:nowrap;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.cat.active{background:var(--orange);border-color:var(--orange);color:white;box-shadow:0 4px 12px rgba(232,89,12,.3)}
+.cat:hover:not(.active){background:var(--orange-light);border-color:var(--orange);color:var(--orange)}
+
+/* Food grid */
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:40px}
+.food-card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e4e7ec;box-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);cursor:pointer;transition:.18s;position:relative;display:flex;flex-direction:column}
+.food-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:#c8cdd6;transform:translateY(-2px)}
+.food-card:hover .food-emoji-box{background:#fff7f3 !important}
+.food-emoji-box{height:130px;display:flex;align-items:center;justify-content:center;font-size:3.4rem;background:#f8f9fa !important;border-bottom:1px solid #f1f3f5;flex-shrink:0}
+.food-badge{position:absolute;top:8px;right:8px;background:var(--orange);color:white;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
+.food-body{padding:12px 14px;flex:1;display:flex;flex-direction:column}
+.food-name{font-weight:700;font-size:.9rem;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1a1a2e}
+.food-cat{font-size:.7rem;color:var(--text-muted);margin-bottom:auto;padding-bottom:10px;font-weight:500}
+.food-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid #f1f3f5}
+.food-price{font-weight:800;color:var(--orange);font-size:.9rem}
+.food-rating{font-size:.72rem;color:#92400e;font-weight:700;background:#fef3c7;padding:2px 7px;border-radius:3px}
+.food-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:.63rem;padding:2px 8px;border-radius:3px;background:#f1f5f9;color:#475569;font-weight:600}
+.tag.green{background:#f0fdf4;color:#166534}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:16px 0 32px;flex-wrap:wrap;gap:10px}
+.pg-info{font-size:.8rem;color:var(--text-muted);font-weight:500}
+.pg-controls{display:flex;align-items:center;gap:4px}
+.pg-btn{min-width:32px;height:32px;padding:0 6px;border:1px solid #e4e7ec;border-radius:6px;background:#fff;color:#374151;font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.pg-btn:hover:not(:disabled){border-color:#9ca3af;background:#f9fafb}
+.pg-btn.active{background:var(--orange);border-color:var(--orange);color:white}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-ellipsis{padding:0 4px;color:var(--text-muted);font-size:.82rem;line-height:32px}
+
+/* ===== QUIZ PAGE ===== */
+#page-quiz{background:var(--bg)}
+.quiz-container{max-width:640px;margin:0 auto;padding:40px 24px}
+.quiz-header{text-align:center;margin-bottom:36px}
+.quiz-header h2{font-size:1.75rem;font-weight:900;letter-spacing:-.5px;margin-bottom:8px}
+.quiz-header p{color:var(--text-muted);font-size:.9rem}
+.progress-wrap{margin-bottom:28px}
+.progress-info{display:flex;justify-content:space-between;font-size:.78rem;font-weight:700;color:var(--text-muted);margin-bottom:8px}
+.progress-bar{height:6px;background:#e5e7eb;border-radius:99px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#f97316);border-radius:99px;transition:.4s}
+.quiz-q-card{background:white;border-radius:20px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.07);margin-bottom:20px;border:1px solid var(--border)}
+.quiz-q-title{font-size:1.15rem;font-weight:800;margin-bottom:22px;display:flex;align-items:center;gap:10px;line-height:1.3}
+.q-icon{font-size:1.4rem;flex-shrink:0}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{padding:18px 14px;border:2px solid var(--border);border-radius:14px;text-align:center;cursor:pointer;transition:.2s;background:white}
+.quiz-opt:hover{border-color:var(--orange);background:var(--orange-light);transform:translateY(-2px)}
+.quiz-opt.sel{border-color:var(--orange);background:var(--orange-light)}
+.quiz-opt.sel .opt-label{color:var(--orange);font-weight:800}
+.opt-emoji{font-size:2rem;display:block;margin-bottom:8px}
+.opt-label{font-size:.88rem;font-weight:700;color:var(--text)}
+.opt-sub{font-size:.73rem;color:var(--text-muted);margin-top:3px}
+.quiz-nav{display:flex;gap:10px;justify-content:center;margin-top:4px}
+.q-btn{padding:12px 36px;border-radius:var(--radius-sm);font-weight:700;font-size:.92rem;border:1.5px solid var(--border);background:white;color:var(--text-muted);transition:.2s;font-family:inherit;cursor:pointer}
+.q-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange);background:var(--orange-light)}
+.q-btn.primary{background:var(--orange);color:white;border-color:var(--orange);box-shadow:0 4px 14px rgba(232,89,12,.25)}
+.q-btn.primary:hover{background:#c94a09;box-shadow:0 6px 20px rgba(232,89,12,.35)}
+.q-btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* ===== RESULT PAGE ===== */
+#page-result{background:var(--bg)}
+.result-container{max-width:860px;margin:0 auto;padding:40px 24px}
+.result-header{text-align:center;margin-bottom:32px}
+.result-badge-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.rbadge{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:99px;font-size:.78rem;font-weight:700}
+.rbadge.orange{background:var(--orange-light);color:var(--orange);border:1px solid #f9c09a}
+.rbadge.green{background:var(--green-light);color:var(--green);border:1px solid #a7f3c1}
+.result-header h2{font-size:1.6rem;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.result-header p{color:var(--text-muted);font-size:.88rem}
+.result-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.result-card{background:white;border-radius:16px;border:1.5px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,.06);padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:.25s;position:relative}
+.result-card:hover{box-shadow:0 8px 28px rgba(232,89,12,.14);border-color:var(--orange);transform:translateX(4px)}
+.result-card.top{border-color:var(--orange);background:linear-gradient(135deg,#fffaf7,#fff4ed)}
+.rc-rank{font-size:1.6rem;min-width:36px;text-align:center}
+.rc-emoji{font-size:2.4rem;min-width:48px;text-align:center;background:var(--orange-light);border-radius:12px;height:48px;display:flex;align-items:center;justify-content:center}
+.rc-info{flex:1;min-width:0}
+.rc-name{font-size:1rem;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.top-pill{font-size:.66rem;background:var(--orange);color:white;padding:2px 9px;border-radius:99px;font-weight:800;letter-spacing:.02em}
+.rc-meta{font-size:.78rem;color:var(--text-muted);margin-bottom:6px;font-weight:500}
+.rc-tags2{display:flex;gap:5px;flex-wrap:wrap}
+.rc-right{text-align:right;min-width:90px}
+.rc-price2{font-size:1.15rem;font-weight:900;color:var(--orange)}
+.rc-match{font-size:.72rem;color:var(--green);font-weight:700;margin-top:4px}
+.rc-score-bar{height:4px;background:#e5e7eb;border-radius:99px;margin-top:6px;overflow:hidden}
+.rc-score-fill{height:100%;background:linear-gradient(90deg,var(--green),#4ade80);border-radius:99px}
+.result-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ra-btn{padding:14px;border-radius:var(--radius-sm);font-weight:700;font-size:.92rem;border:1.5px solid var(--border);background:white;color:var(--text-muted);transition:.2s;font-family:inherit;cursor:pointer}
+.ra-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-light)}
+.ra-btn.primary{background:var(--orange);color:white;border-color:var(--orange);box-shadow:0 4px 14px rgba(232,89,12,.25)}
+.ra-btn.primary:hover{background:#c94a09}
+
+/* ===== RESTAURANT MODAL ===== */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+#modal-overlay.show{display:flex}
+.modal-box{background:white;border-radius:24px 24px 0 0;width:min(800px,100%);max-height:88vh;overflow-y:auto;padding:28px;animation:slideUp .3s cubic-bezier(.32,.72,0,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.modal-food-name{font-size:1.35rem;font-weight:900;letter-spacing:-.3px}
+.modal-close{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);background:#f3f4f6;border:none;font-size:1rem;transition:.2s}
+.modal-close:hover{background:#e5e7eb;color:var(--text)}
+.location-row{display:flex;gap:8px;margin-bottom:20px;align-items:center;flex-wrap:wrap}
+.location-row input{flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;outline:none;font-family:inherit;transition:.2s}
+.location-row input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(232,89,12,.08)}
+.location-row button{padding:10px 20px;background:var(--orange);color:white;border:none;border-radius:var(--radius-sm);font-weight:700;font-size:.85rem;font-family:inherit;cursor:pointer;transition:.2s}
+.location-row button:hover{background:#c94a09}
+.rest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.rest-card{background:#fafafa;border-radius:12px;padding:14px;border:1px solid var(--border);transition:.2s}
+.rest-card:hover{border-color:var(--orange);background:var(--orange-light);transform:translateY(-2px)}
+.rest-name{font-weight:700;font-size:.92rem;margin-bottom:3px}
+.rest-addr{font-size:.76rem;color:var(--text-muted);margin-bottom:8px;line-height:1.4}
+.rest-meta-row{display:flex;justify-content:space-between;align-items:center}
+.rest-stars{color:#f59e0b;font-size:.8rem;font-weight:700}
+.rest-km{font-size:.76rem;background:var(--orange-light);color:var(--orange);padding:3px 9px;border-radius:99px;font-weight:700}
+.rest-menu{font-size:.73rem;color:var(--text-muted);margin-top:5px}
+
+/* ===== LOADING ===== */
+.loading{text-align:center;padding:40px;color:var(--text-muted)}
+.spinner{width:36px;height:36px;border:3px solid #e5e7eb;border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:860px){.sidebar-filter{display:none}}
+@media(max-width:600px){
+  .quiz-opts{grid-template-columns:1fr}
+  .result-actions{grid-template-columns:1fr}
+  .food-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .result-card{flex-wrap:wrap}
+}
+
+/* ===== ADMIN PAGE ===== */
+.admin-wrap{max-width:1200px;margin:0 auto;padding:32px 24px}
+.admin-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.admin-hdr h2{font-size:1.35rem;font-weight:900;letter-spacing:-.3px}
+.btn-add{padding:10px 20px;background:var(--green);color:white;border:none;border-radius:var(--radius-sm);font-weight:700;font-size:.85rem;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-add:hover{background:#24874f;transform:translateY(-1px)}
+.admin-table-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--border);background:white;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.admin-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.admin-table th{background:#fafafa;padding:11px 14px;text-align:left;font-weight:800;font-size:.75rem;color:var(--text-muted);border-bottom:1.5px solid var(--border);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.admin-table td{padding:11px 14px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:#fffaf7}
+.tbl-cat{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.7rem;font-weight:800;background:var(--orange-light);color:var(--orange)}
+.tbl-price{font-weight:800;color:var(--orange)}
+.tbl-rating{color:#f59e0b;font-weight:700}
+.action-btns{display:flex;gap:6px;white-space:nowrap}
+.btn-edit{padding:5px 12px;background:var(--orange-light);color:var(--orange);border:1px solid var(--orange);border-radius:6px;font-size:.76rem;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-edit:hover{background:var(--orange);color:white}
+.btn-del{padding:5px 12px;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;font-size:.76rem;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-del:hover{background:#dc2626;color:white}
+.admin-stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.admin-stat{background:white;border:1px solid var(--border);border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 6px rgba(0,0,0,.05);min-width:130px}
+.admin-stat-n{font-size:1.5rem;font-weight:900;color:var(--orange);line-height:1}
+.admin-stat-l{font-size:.75rem;color:var(--text-muted);font-weight:600}
+.admin-search{padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.86rem;outline:none;width:240px;font-family:inherit;transition:.2s}
+.admin-search:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(232,89,12,.08)}
+.admin-filter-row{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.admin-back{color:var(--orange);font-size:.83rem;font-weight:700;cursor:pointer;margin-bottom:20px;display:inline-flex;align-items:center;gap:6px;background:var(--orange-light);border:1px solid var(--orange-mid);padding:7px 14px;border-radius:99px;font-family:inherit;transition:.2s}
+.admin-back:hover{background:var(--orange);color:white}
+.nav-btn.admin-btn{background:#1e293b;color:white;border-color:#1e293b}
+.nav-btn.admin-btn:hover{background:#334155;border-color:#334155}
+
+/* Admin Form Modal */
+#admin-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:16px}
+#admin-modal.show{display:flex}
+.admin-form-box{background:white;border-radius:20px;width:min(600px,100%);max-height:90vh;overflow-y:auto;padding:28px;box-shadow:var(--shadow-lg)}
+.admin-form-title{font-size:1.1rem;font-weight:900;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid .full{grid-column:1/-1}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:.78rem;font-weight:700;color:var(--text-muted)}
+.fg input,.fg select{padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;font-family:inherit;outline:none;transition:.2s}
+.fg input:focus,.fg select:focus{border-color:var(--orange)}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.btn-cancel{padding:10px 22px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:white;font-weight:700;font-size:.9rem;cursor:pointer;color:var(--text-muted);font-family:inherit}
+.btn-save{padding:10px 22px;background:var(--orange);color:white;border:none;border-radius:var(--radius-sm);font-weight:700;font-size:.9rem;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-save:hover{background:#c94a09}
+
+/* Toast */
+#toast-container{position:fixed;top:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{padding:12px 18px;border-radius:12px;font-size:.88rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.15);opacity:0;transform:translateY(-12px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:300px;line-height:1.4}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.error{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
+.toast.warning{background:#fffbeb;color:#d97706;border:1px solid #fcd34d}
+.toast.success{background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+
+/* User Results Modal */
+#user-results-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:700;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:16px}
+#user-results-modal.show{display:flex}
+.ur-box{background:white;border-radius:20px;width:min(680px,100%);max-height:88vh;overflow-y:auto;padding:28px;box-shadow:var(--shadow-lg)}
+.ur-title{font-size:1.1rem;font-weight:900;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.ur-empty{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:.95rem}
+.ur-item{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;background:#fffaf7}
+.ur-item-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ur-name{font-weight:800;font-size:.95rem}
+.ur-email{font-size:.78rem;color:var(--text-muted)}
+.ur-time{font-size:.72rem;color:var(--text-muted)}
+.ur-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ur-badge{font-size:.72rem;padding:3px 9px;border-radius:99px;background:var(--orange-light);color:var(--orange);font-weight:700;border:1px solid #f9c09a}
+.ur-foods{display:flex;gap:6px;flex-wrap:wrap}
+.ur-food{font-size:.78rem;padding:3px 10px;background:#f1f5f9;border-radius:99px;color:#334155;font-weight:600}
+.ur-food.top{background:var(--orange);color:white}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-overlay">
+  <!-- LEFT: Form -->
+  <div class="auth-left">
+    <div class="auth-left-inner">
+      <div class="auth-brand">
+        <div class="auth-brand-icon">🍜</div>
+        <div class="auth-brand-name">Hôm Nay <span>Ăn Gì?</span></div>
+      </div>
+      <div id="auth-heading-login">
+        <div class="auth-heading">Chào mừng trở lại!</div>
+        <div class="auth-heading-sub">Đăng nhập để khám phá món ngon hôm nay</div>
+      </div>
+      <div id="auth-heading-register" style="display:none">
+        <div class="auth-heading">Tạo tài khoản</div>
+        <div class="auth-heading-sub">Miễn phí · Không quảng cáo · Dành cho sinh viên</div>
+      </div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchTab('login')">Đăng nhập</div>
+        <div class="auth-tab" onclick="switchTab('register')">Đăng ký</div>
+      </div>
+      <!-- LOGIN -->
+      <div id="login-form">
+        <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="sinh.vien@email.com"></div>
+        <div class="form-group"><label>Mật khẩu</label><input type="password" id="login-pw" placeholder="••••••••"></div>
+        <button class="btn-auth" onclick="doLogin()">Đăng nhập →</button>
+        <div class="auth-err" id="login-err">Email hoặc mật khẩu không đúng!</div>
+        <p style="text-align:center;font-size:.78rem;margin-top:14px;color:var(--text-muted)">Demo: <b>demo@sv.com</b> / <b>123456</b></p>
+        <div class="auth-switch">Chưa có tài khoản? <a onclick="switchTab('register')">Đăng ký ngay</a></div>
+      </div>
+      <!-- REGISTER -->
+      <div id="register-form" style="display:none">
+        <div class="form-group"><label>Họ và tên</label><input type="text" id="reg-name" placeholder="Nguyễn Văn A"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="email@sv.com"></div>
+        <div class="form-group"><label>Mật khẩu</label><input type="password" id="reg-pw" placeholder="Tối thiểu 6 ký tự"></div>
+        <div class="form-group">
+          <label>Bạn là?</label>
+          <select id="reg-type">
+            <option value="sv_nam1">Sinh viên năm 1 (mới lên TP)</option>
+            <option value="sv_namcuoi">Sinh viên năm cuối / thực tập</option>
+            <option value="sv_suckhoe">Sinh viên chú trọng sức khoẻ</option>
+          </select>
+        </div>
+        <button class="btn-auth" onclick="doRegister()">Tạo tài khoản →</button>
+        <div class="auth-err" id="reg-err">Vui lòng điền đầy đủ thông tin!</div>
+        <div class="auth-switch">Đã có tài khoản? <a onclick="switchTab('login')">Đăng nhập</a></div>
+      </div>
+    </div>
+  </div>
+  <!-- RIGHT: Decorative panel -->
+  <div class="auth-right">
+    <div class="auth-right-deco">
+      <span>🍜</span><span>🍗</span><span>🥗</span><span>🍱</span><span>🧋</span><span>🌮</span>
+    </div>
+    <div class="auth-right-content">
+      <div class="auth-right-emoji">🍽️</div>
+      <div class="auth-right-title">Hôm nay ăn gì<br><em>thật sự ngon?</em></div>
+      <div class="auth-right-desc">Gợi ý thực đơn thông minh theo ngân sách, khẩu vị và thời gian của bạn — chỉ trong vài giây.</div>
+      <div class="auth-right-pills">
+        <span class="auth-right-pill">⚡ Gợi ý < 5s</span>
+        <span class="auth-right-pill">💰 Dưới 50k</span>
+        <span class="auth-right-pill">🥦 Healthy</span>
+        <span class="auth-right-pill">📍 Gần bạn</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><div class="logo-icon">🍜</div>Hôm Nay <span>Ăn Gì?</span></div>
+    <div class="nav-divider"></div>
+    <div class="nav-page-btns" id="page-nav" style="display:none">
+      <button class="page-btn active" onclick="showPage('home')">Trang chủ</button>
+      <button class="page-btn" onclick="showPage('quiz')">✨ Gợi ý</button>
+      <button class="page-btn" onclick="showPage('result')">Kết quả</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="nav-menu" id="nav-auth-btns">
+      <button class="nav-btn" onclick="document.getElementById('auth-overlay').style.display='flex'">Đăng nhập</button>
+      <button class="nav-btn fill" onclick="switchTab('register');document.getElementById('auth-overlay').style.display='flex'">Đăng ký</button>
+    </div>
+    <div class="nav-user" id="nav-user">
+      <div class="user-avatar" id="user-avatar">A</div>
+      <span class="user-name" id="user-name-display">Người dùng</span>
+      <button class="nav-btn admin-btn" id="nav-admin-btn" onclick="showAdminPage()" style="display:none">⚙️ Admin</button>
+      <button class="nav-btn" onclick="doLogout()">Đăng xuất</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+
+  <div class="stats-row">
+    <div class="stats-inner">
+      <div class="stat-it">🍽️ <span class="stat-n">100+</span> món ăn</div>
+      <div class="stat-it">💰 Từ <span class="stat-n">10k</span>/bữa</div>
+      <div class="stat-it">🏪 <span class="stat-n">50+</span> quán</div>
+      <div class="stat-it">⚡ Gợi ý trong <span class="stat-n">&lt;5s</span></div>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Tìm món ăn..." oninput="filterFoods()">
+    </div>
+    <div class="filter-sep"></div>
+    <span class="filter-label">Danh mục</span>
+    <div class="cat-row" id="cat-row"></div>
+    <div class="filter-sep"></div>
+    <span class="filter-count" id="filter-count">100 món</span>
+    <span class="filter-clear" onclick="clearFilter()">✕ Xóa lọc</span>
+  </div>
+  <div class="main-content">
+    <!-- SIDEBAR FILTER -->
+    <div class="sidebar-filter" id="sidebar-filter">
+      <div class="sf-head">
+        <span class="sf-head-title">Bộ lọc</span>
+        <span class="sf-clear" onclick="clearAllFilters()">Xóa tất cả</span>
+      </div>
+      <!-- Khẩu vị -->
+      <div class="sf-section" id="sf-flavor">
+        <div class="sf-section-hdr" onclick="toggleSection('sf-flavor')">
+          <span class="sf-section-label">Khẩu vị</span>
+          <span class="sf-arrow">▾</span>
+        </div>
+        <div class="sf-body">
+          <label class="sf-opt"><input type="checkbox" value="mặn" onchange="applyFilters()"><span class="sf-opt-label">🧂 Mặn</span></label>
+          <label class="sf-opt"><input type="checkbox" value="cay" onchange="applyFilters()"><span class="sf-opt-label">🌶️ Cay</span></label>
+          <label class="sf-opt"><input type="checkbox" value="nhẹ" onchange="applyFilters()"><span class="sf-opt-label">🥗 Nhẹ</span></label>
+          <label class="sf-opt"><input type="checkbox" value="ngọt" onchange="applyFilters()"><span class="sf-opt-label">🍯 Ngọt</span></label>
+        </div>
+      </div>
+      <!-- Thời gian -->
+      <div class="sf-section" id="sf-time">
+        <div class="sf-section-hdr" onclick="toggleSection('sf-time')">
+          <span class="sf-section-label">Thời gian chờ</span>
+          <span class="sf-arrow">▾</span>
+        </div>
+        <div class="sf-body">
+          <label class="sf-opt"><input type="checkbox" value="nhanh" onchange="applyFilters()"><span class="sf-opt-label">⚡ Nhanh (&lt;15p)</span></label>
+          <label class="sf-opt"><input type="checkbox" value="vừa" onchange="applyFilters()"><span class="sf-opt-label">🕐 Vừa (15–30p)</span></label>
+          <label class="sf-opt"><input type="checkbox" value="lâu" onchange="applyFilters()"><span class="sf-opt-label">🍳 Lâu (&gt;30p)</span></label>
+        </div>
+      </div>
+      <!-- Ngân sách -->
+      <div class="sf-section" id="sf-budget">
+        <div class="sf-section-hdr" onclick="toggleSection('sf-budget')">
+          <span class="sf-section-label">Ngân sách</span>
+          <span class="sf-arrow">▾</span>
+        </div>
+        <div class="sf-body">
+          <label class="sf-opt"><input type="checkbox" value="low" onchange="applyFilters()"><span class="sf-opt-label">💚 Dưới 20k</span></label>
+          <label class="sf-opt"><input type="checkbox" value="mid" onchange="applyFilters()"><span class="sf-opt-label">💛 20k – 45k</span></label>
+          <label class="sf-opt"><input type="checkbox" value="high" onchange="applyFilters()"><span class="sf-opt-label">🧡 Trên 45k</span></label>
+        </div>
+      </div>
+      <!-- Healthy -->
+      <div class="sf-section" id="sf-healthy">
+        <div class="sf-section-hdr" onclick="toggleSection('sf-healthy')">
+          <span class="sf-section-label">Mức healthy</span>
+          <span class="sf-arrow">▾</span>
+        </div>
+        <div class="sf-body">
+          <div class="sf-range">
+            <input type="range" id="sf-healthy-min" min="1" max="5" value="1" oninput="applyFilters()">
+            <div class="sf-range-labels"><span>1 – Bình thường</span><span id="sf-healthy-val">≥ 1</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Rating -->
+      <div class="sf-section" id="sf-rating">
+        <div class="sf-section-hdr" onclick="toggleSection('sf-rating')">
+          <span class="sf-section-label">Đánh giá</span>
+          <span class="sf-arrow">▾</span>
+        </div>
+        <div class="sf-body">
+          <label class="sf-opt"><input type="checkbox" value="4.5" onchange="applyFilters()"><span class="sf-opt-label">⭐ 4.5 trở lên</span></label>
+          <label class="sf-opt"><input type="checkbox" value="4.0" onchange="applyFilters()"><span class="sf-opt-label">⭐ 4.0 trở lên</span></label>
+          <label class="sf-opt"><input type="checkbox" value="3.5" onchange="applyFilters()"><span class="sf-opt-label">⭐ 3.5 trở lên</span></label>
+        </div>
+      </div>
+    </div>
+    <!-- CONTENT -->
+    <div class="content-main">
+    <div class="food-grid" id="food-grid">
+    <div class="food-card" onclick="openModal(1)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍗</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Gà Xối Mỡ</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">28.000đ</div>
+          <div class="food-rating">⭐ 4.9</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(2)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍖</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Tấm Sườn Bì</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(3)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍳</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Chiên Dương Châu</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">25.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Đông Á</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(4)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🥩</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Rang Dưa Bò</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">30.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(5)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍱</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Hộp Văn Phòng</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">22.000đ</div>
+          <div class="food-rating">⭐ 4.4</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cân bằng</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(6)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍚</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Gà Hải Nam</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Hoa</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(7)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🫙</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Niêu Than Hồng</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(8)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🥩</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Bò Lúc Lắc</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.9</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(9)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍙</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Cuộn Kimbap</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(10)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🥚</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Chiên Trứng Muối</div>
+        <div class="food-cat">Cơm</div>
+        <div class="food-footer">
+          <div class="food-price">28.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Đông Á</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(11)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🍜</div>
+      <div class="food-body">
+        <div class="food-name">Phở Bò Tái Nam</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.9</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(12)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🌶️</div>
+      <div class="food-body">
+        <div class="food-name">Bún Bò Huế</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(13)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🦀</div>
+      <div class="food-body">
+        <div class="food-name">Bún Riêu Cua</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">38.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chua</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(14)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🦀</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Canh Cua</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">42.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(15)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🍝</div>
+      <div class="food-body">
+        <div class="food-name">Hủ Tiếu Nam Vang</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(16)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🍜</div>
+      <div class="food-body">
+        <div class="food-name">Mì Quảng</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay nhẹ</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(17)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🐟</div>
+      <div class="food-body">
+        <div class="food-name">Bún Mắm</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">38.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Miền Tây</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(18)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🍗</div>
+      <div class="food-body">
+        <div class="food-name">Phở Gà</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">42.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(19)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🥩</div>
+      <div class="food-body">
+        <div class="food-name">Bún Chả Hà Nội</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Bắc</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(20)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🍗</div>
+      <div class="food-body">
+        <div class="food-name">Miến Gà</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(21)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍗</div>
+      <div class="food-body">
+        <div class="food-name">Gà Rán KFC</div>
+        <div class="food-cat">Gà Rán</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Giòn</span><span class="tag">Mỹ</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(22)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍗</div>
+      <div class="food-body">
+        <div class="food-name">Gà Rán Lotteria</div>
+        <div class="food-cat">Gà Rán</div>
+        <div class="food-footer">
+          <div class="food-price">50.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Giòn</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(23)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍔</div>
+      <div class="food-body">
+        <div class="food-name">Burger Bò Phô Mai</div>
+        <div class="food-cat">Gà Rán</div>
+        <div class="food-footer">
+          <div class="food-price">48.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Mỹ</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(24)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🐔</div>
+      <div class="food-body">
+        <div class="food-name">Nuggets Gà</div>
+        <div class="food-cat">Gà Rán</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Giòn</span><span class="tag">Snack</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(25)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🌭</div>
+      <div class="food-body">
+        <div class="food-name">Hot Dog Xúc Xích</div>
+        <div class="food-cat">Gà Rán</div>
+        <div class="food-footer">
+          <div class="food-price">25.000đ</div>
+          <div class="food-rating">⭐ 4.3</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhanh</span><span class="tag">Snack</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(26)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#fff8e1">🥖</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Mì Thịt Nướng</div>
+        <div class="food-cat">Bánh Mì</div>
+        <div class="food-footer">
+          <div class="food-price">18.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(27)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🥖</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Mì Phá Lấu</div>
+        <div class="food-cat">Bánh Mì</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(28)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#fff8e1">🍳</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Mì Trứng Ốp La</div>
+        <div class="food-cat">Bánh Mì</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(29)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🐟</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Mì Chả Cá</div>
+        <div class="food-cat">Bánh Mì</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(30)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#fff8e1">🧈</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Mì Bơ Sữa</div>
+        <div class="food-cat">Bánh Mì</div>
+        <div class="food-footer">
+          <div class="food-price">12.000đ</div>
+          <div class="food-rating">⭐ 4.3</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Sáng</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(31)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🥦</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Chay Tự Chọn</div>
+        <div class="food-cat">Ăn Chay</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chay</span><span class="tag">Healthy</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(32)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🍄</div>
+      <div class="food-body">
+        <div class="food-name">Bún Chay Nấm</div>
+        <div class="food-cat">Ăn Chay</div>
+        <div class="food-footer">
+          <div class="food-price">25.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chay</span><span class="tag">Nước</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(33)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🥕</div>
+      <div class="food-body">
+        <div class="food-name">Mì Xào Rau Củ</div>
+        <div class="food-cat">Ăn Chay</div>
+        <div class="food-footer">
+          <div class="food-price">22.000đ</div>
+          <div class="food-rating">⭐ 4.4</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chay</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(34)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#e8f5e9">🥖</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Mì Chay Pate</div>
+        <div class="food-cat">Ăn Chay</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chay</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(35)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🥗</div>
+      <div class="food-body">
+        <div class="food-name">Salad Quinoa Rau Củ</div>
+        <div class="food-cat">Ăn Chay</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chay</span><span class="tag">Healthy</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(36)">
+      
+      <div class="food-emoji-box" style="background:#e0f7fa">🥗</div>
+      <div class="food-body">
+        <div class="food-name">Salad Gà Nướng</div>
+        <div class="food-cat">Healthy</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Healthy</span><span class="tag">Ít calo</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(37)">
+      
+      <div class="food-emoji-box" style="background:#e0f7fa">🥦</div>
+      <div class="food-body">
+        <div class="food-name">Ức Gà Hấp Rau</div>
+        <div class="food-cat">Healthy</div>
+        <div class="food-footer">
+          <div class="food-price">38.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Healthy</span><span class="tag">Gym</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(38)">
+      
+      <div class="food-emoji-box" style="background:#e0f7fa">🐟</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Gạo Lứt + Cá</div>
+        <div class="food-cat">Healthy</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Healthy</span><span class="tag">Clean</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(39)">
+      
+      <div class="food-emoji-box" style="background:#e0f7fa">🍓</div>
+      <div class="food-body">
+        <div class="food-name">Granola Hoa Quả</div>
+        <div class="food-cat">Healthy</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Healthy</span><span class="tag">Sáng</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(40)">
+      
+      <div class="food-emoji-box" style="background:#e0f7fa">🥣</div>
+      <div class="food-body">
+        <div class="food-name">Smoothie Bowl</div>
+        <div class="food-cat">Healthy</div>
+        <div class="food-footer">
+          <div class="food-price">42.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Healthy</span><span class="tag">Ngọt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(41)">
+      
+      <div class="food-emoji-box" style="background:#f3e5f5">🧋</div>
+      <div class="food-body">
+        <div class="food-name">Trà Sữa Trân Châu</div>
+        <div class="food-cat">Đồ Uống</div>
+        <div class="food-footer">
+          <div class="food-price">32.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Phổ biến</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(42)">
+      
+      <div class="food-emoji-box" style="background:#f3e5f5">🥭</div>
+      <div class="food-body">
+        <div class="food-name">Sinh Tố Xoài</div>
+        <div class="food-cat">Đồ Uống</div>
+        <div class="food-footer">
+          <div class="food-price">25.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Trái cây</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(43)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f3e5f5">☕</div>
+      <div class="food-body">
+        <div class="food-name">Cà Phê Sữa Đá</div>
+        <div class="food-cat">Đồ Uống</div>
+        <div class="food-footer">
+          <div class="food-price">18.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Đắng</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(44)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f3e5f5">🍹</div>
+      <div class="food-body">
+        <div class="food-name">Nước Mía Tắc</div>
+        <div class="food-cat">Đồ Uống</div>
+        <div class="food-footer">
+          <div class="food-price">12.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Chua</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(45)">
+      
+      <div class="food-emoji-box" style="background:#f3e5f5">🍑</div>
+      <div class="food-body">
+        <div class="food-name">Trà Đào Cam Sả</div>
+        <div class="food-cat">Đồ Uống</div>
+        <div class="food-footer">
+          <div class="food-price">28.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Mát</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(46)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🌯</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Tráng Trộn</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">SV yêu thích</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(47)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🍢</div>
+      <div class="food-body">
+        <div class="food-name">Xiên Thịt Que Chiên</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">5.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chiên</span><span class="tag">Snack</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(48)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🐟</div>
+      <div class="food-body">
+        <div class="food-name">Cá Viên Chiên</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">10.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chiên</span><span class="tag">Snack</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(49)">
+      
+      <div class="food-emoji-box" style="background:#ffecd2">🥟</div>
+      <div class="food-body">
+        <div class="food-name">Chả Giò Rế</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chiên</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(50)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🍠</div>
+      <div class="food-body">
+        <div class="food-name">Khoai Lang Chiên</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chiên</span><span class="tag">Ngọt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(51)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🌶️</div>
+      <div class="food-body">
+        <div class="food-name">Tteokbokki Cay</div>
+        <div class="food-cat">Hàn Quốc</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(52)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍲</div>
+      <div class="food-body">
+        <div class="food-name">Bibimbap</div>
+        <div class="food-cat">Hàn Quốc</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cân bằng</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(53)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍜</div>
+      <div class="food-body">
+        <div class="food-name">Ramyeon Hàn Quốc</div>
+        <div class="food-cat">Hàn Quốc</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(54)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍗</div>
+      <div class="food-body">
+        <div class="food-name">Korean Fried Chicken</div>
+        <div class="food-cat">Hàn Quốc</div>
+        <div class="food-footer">
+          <div class="food-price">60.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Giòn</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(55)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🥟</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Bao Nhân Thịt</div>
+        <div class="food-cat">Hàn Quốc</div>
+        <div class="food-footer">
+          <div class="food-price">30.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(56)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍕</div>
+      <div class="food-body">
+        <div class="food-name">Pizza Bò Phô Mai</div>
+        <div class="food-cat">Pizza &amp; Ý</div>
+        <div class="food-footer">
+          <div class="food-price">75.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Ý</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(57)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍝</div>
+      <div class="food-body">
+        <div class="food-name">Mì Ý Carbonara</div>
+        <div class="food-cat">Pizza &amp; Ý</div>
+        <div class="food-footer">
+          <div class="food-price">65.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Kem</span><span class="tag">Ý</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(58)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍝</div>
+      <div class="food-body">
+        <div class="food-name">Mì Ý Sốt Cà Chua</div>
+        <div class="food-cat">Pizza &amp; Ý</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chua</span><span class="tag">Ý</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(59)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🫓</div>
+      <div class="food-body">
+        <div class="food-name">Calzone Nhân Hỗn Hợp</div>
+        <div class="food-cat">Pizza &amp; Ý</div>
+        <div class="food-footer">
+          <div class="food-price">80.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Ý</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(60)">
+      
+      <div class="food-emoji-box" style="background:#fff3e0">🍅</div>
+      <div class="food-body">
+        <div class="food-name">Bruschetta Cà Chua</div>
+        <div class="food-cat">Pizza &amp; Ý</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Khai vị</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(61)">
+      
+      <div class="food-emoji-box" style="background:#e8eaf6">🍣</div>
+      <div class="food-body">
+        <div class="food-name">Sushi Hỗn Hợp</div>
+        <div class="food-cat">Nhật Bản</div>
+        <div class="food-footer">
+          <div class="food-price">85.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Nhật</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(62)">
+      
+      <div class="food-emoji-box" style="background:#e8eaf6">🍜</div>
+      <div class="food-body">
+        <div class="food-name">Ramen Tonkotsu</div>
+        <div class="food-cat">Nhật Bản</div>
+        <div class="food-footer">
+          <div class="food-price">65.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Nhật</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(63)">
+      
+      <div class="food-emoji-box" style="background:#e8eaf6">🐙</div>
+      <div class="food-body">
+        <div class="food-name">Takoyaki Bạch Tuộc</div>
+        <div class="food-cat">Nhật Bản</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Nhật</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(64)">
+      
+      <div class="food-emoji-box" style="background:#e8eaf6">🍜</div>
+      <div class="food-body">
+        <div class="food-name">Udon Nước Trong</div>
+        <div class="food-cat">Nhật Bản</div>
+        <div class="food-footer">
+          <div class="food-price">50.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Nhật</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(65)">
+      
+      <div class="food-emoji-box" style="background:#e8eaf6">🦐</div>
+      <div class="food-body">
+        <div class="food-name">Tempura Tôm</div>
+        <div class="food-cat">Nhật Bản</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chiên</span><span class="tag">Nhật</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(66)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f1f8e9">🍳</div>
+      <div class="food-body">
+        <div class="food-name">Mì Trứng Xào Rau</div>
+        <div class="food-cat">Tự Nấu</div>
+        <div class="food-footer">
+          <div class="food-price">12.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Tự nấu</span><span class="tag">Nhanh</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(67)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f1f8e9">🥣</div>
+      <div class="food-body">
+        <div class="food-name">Cháo Trắng Trứng Muối</div>
+        <div class="food-cat">Tự Nấu</div>
+        <div class="food-footer">
+          <div class="food-price">10.000đ</div>
+          <div class="food-rating">⭐ 4.4</div>
+        </div>
+        <div class="food-tags"><span class="tag">Tự nấu</span><span class="tag">Ốm</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(68)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f1f8e9">🥬</div>
+      <div class="food-body">
+        <div class="food-name">Xào Rau Cải Tỏi</div>
+        <div class="food-cat">Tự Nấu</div>
+        <div class="food-footer">
+          <div class="food-price">8.000đ</div>
+          <div class="food-rating">⭐ 4.3</div>
+        </div>
+        <div class="food-tags"><span class="tag">Tự nấu</span><span class="tag">Healthy</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(69)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f1f8e9">🎃</div>
+      <div class="food-body">
+        <div class="food-name">Canh Bí Đỏ Nấu Tôm</div>
+        <div class="food-cat">Tự Nấu</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Tự nấu</span><span class="tag">Lành</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(70)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#f1f8e9">🥚</div>
+      <div class="food-body">
+        <div class="food-name">Trứng Chiên Cà Chua</div>
+        <div class="food-cat">Tự Nấu</div>
+        <div class="food-footer">
+          <div class="food-price">10.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Tự nấu</span><span class="tag">Nhanh</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(71)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🥞</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Xèo Miền Tây</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">30.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Giòn</span><span class="tag">Miền Tây</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(72)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🌯</div>
+      <div class="food-body">
+        <div class="food-name">Gỏi Cuốn Tôm Thịt</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Tươi</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(73)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🥩</div>
+      <div class="food-body">
+        <div class="food-name">Nem Nướng Nha Trang</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nướng</span><span class="tag">Miền Trung</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(74)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🥩</div>
+      <div class="food-body">
+        <div class="food-name">Bò Né Sốt Tiêu Đen</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nướng</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(75)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🍲</div>
+      <div class="food-body">
+        <div class="food-name">Lẩu Thái Tom Yum</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">120.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Thái</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(76)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🦞</div>
+      <div class="food-body">
+        <div class="food-name">Lẩu Hải Sản</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">150.000đ</div>
+          <div class="food-rating">⭐ 4.9</div>
+        </div>
+        <div class="food-tags"><span class="tag">Hải Sản</span><span class="tag">Nhóm</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(77)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🥩</div>
+      <div class="food-body">
+        <div class="food-name">Bún Thịt Nướng</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">32.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(78)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🥚</div>
+      <div class="food-body">
+        <div class="food-name">Hột Vịt Lộn Rau Răm</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">8.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Độc đáo</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(79)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🫕</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Cuốn Hà Nội</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">28.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Bắc</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(80)">
+      
+      <div class="food-emoji-box" style="background:#e8f5e9">🥣</div>
+      <div class="food-body">
+        <div class="food-name">Cháo Lòng Heo</div>
+        <div class="food-cat">Bún/Phở</div>
+        <div class="food-footer">
+          <div class="food-price">30.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Sáng</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(81)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🍚</div>
+      <div class="food-body">
+        <div class="food-name">Xôi Gà Xé</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">22.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Dẻo</span><span class="tag">Sáng</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(82)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#fff8e1">🌽</div>
+      <div class="food-body">
+        <div class="food-name">Xôi Xéo Mặn</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">18.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Dẻo</span><span class="tag">Bắc</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(83)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🫕</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Ướt Chả Lụa</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Việt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(84)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#fce4ec">🍵</div>
+      <div class="food-body">
+        <div class="food-name">Chè Đậu Xanh Nước Dừa</div>
+        <div class="food-cat">Tráng Miệng</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Mát</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(85)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🍦</div>
+      <div class="food-body">
+        <div class="food-name">Kem Xôi Chiên</div>
+        <div class="food-cat">Tráng Miệng</div>
+        <div class="food-footer">
+          <div class="food-price">20.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Độc đáo</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(86)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#fce4ec">🍮</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Flan Caramen</div>
+        <div class="food-cat">Tráng Miệng</div>
+        <div class="food-footer">
+          <div class="food-price">18.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Tây</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(87)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🫘</div>
+      <div class="food-body">
+        <div class="food-name">Bún Đậu Mắm Tôm</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">35.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Bắc</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(88)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🍱</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Âm Phủ Huế</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">40.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cân bằng</span><span class="tag">Huế</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(89)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🦑</div>
+      <div class="food-body">
+        <div class="food-name">Mì Hải Sản Xào</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Đông Á</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(90)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🥞</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Khọt Vũng Tàu</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">30.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Giòn</span><span class="tag">Miền Nam</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(91)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🍕</div>
+      <div class="food-body">
+        <div class="food-name">Bánh Tráng Nướng Đà Lạt</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">15.000đ</div>
+          <div class="food-rating">⭐ 4.8</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Đà Lạt</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(92)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🦀</div>
+      <div class="food-body">
+        <div class="food-name">Súp Cua Bắp</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">25.000đ</div>
+          <div class="food-rating">⭐ 4.6</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nước</span><span class="tag">Nhẹ</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(93)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#ffecd2">🌽</div>
+      <div class="food-body">
+        <div class="food-name">Bắp Xào Bơ Tỏi</div>
+        <div class="food-cat">Ăn Vặt</div>
+        <div class="food-footer">
+          <div class="food-price">12.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Ngọt</span><span class="tag">Nhẹ</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(94)">
+      <div class="food-badge">HOT</div>
+      <div class="food-emoji-box" style="background:#e8f5e9">🫘</div>
+      <div class="food-body">
+        <div class="food-name">Đậu Hũ Chiên Sả Ớt</div>
+        <div class="food-cat">Ăn Chay</div>
+        <div class="food-footer">
+          <div class="food-price">18.000đ</div>
+          <div class="food-rating">⭐ 4.5</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Chay</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(95)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🦑</div>
+      <div class="food-body">
+        <div class="food-name">Mực Chiên Bơ Tỏi</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">50.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Mặn</span><span class="tag">Biển</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(96)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🦞</div>
+      <div class="food-body">
+        <div class="food-name">Tôm Hùm Nướng Phô Mai</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">180.000đ</div>
+          <div class="food-rating">⭐ 4.9</div>
+        </div>
+        <div class="food-tags"><span class="tag">Sang</span><span class="tag">Biển</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(97)">
+      
+      <div class="food-emoji-box" style="background:#fce4ec">🥘</div>
+      <div class="food-body">
+        <div class="food-name">Cơm Trộn Hàn Quốc</div>
+        <div class="food-cat">Hàn Quốc</div>
+        <div class="food-footer">
+          <div class="food-price">45.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay nhẹ</span><span class="tag">Hàn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(98)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🍜</div>
+      <div class="food-body">
+        <div class="food-name">Pad Thai Thái Lan</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">50.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Chua ngọt</span><span class="tag">Thái</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(99)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🍛</div>
+      <div class="food-body">
+        <div class="food-name">Curry Cà Ri Ấn</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">55.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Cay</span><span class="tag">Ấn</span></div>
+      </div>
+    </div>
+    <div class="food-card" onclick="openModal(100)">
+      
+      <div class="food-emoji-box" style="background:#fff8e1">🥟</div>
+      <div class="food-body">
+        <div class="food-name">Dim Sum Hỗn Hợp</div>
+        <div class="food-cat">Đặc Sản</div>
+        <div class="food-footer">
+          <div class="food-price">60.000đ</div>
+          <div class="food-rating">⭐ 4.7</div>
+        </div>
+        <div class="food-tags"><span class="tag">Nhẹ</span><span class="tag">Hoa</span></div>
+      </div>
+    </div></div>
+    <div id="pagination"></div>
+    </div><!-- end content-main -->
+  </div>
+</div>
+
+<!-- QUIZ PAGE -->
+<div class="page" id="page-quiz">
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <h2>✨ Gợi ý thực đơn cho bạn</h2>
+      <p>Trả lời 4 câu hỏi nhanh, hệ thống sẽ đề xuất món ăn phù hợp nhất!</p>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="q-step-label">Câu 1 / 4</span>
+        <span id="q-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div id="quiz-questions">
+    <div class="quiz-q-card">
+      <div class="quiz-q-title"><span class="q-icon">⏱️</span>Bạn có bao nhiêu thời gian cho bữa này?</div>
+      <div class="quiz-opts">
+        
+          <div class="quiz-opt " onclick="selectOpt(0)">
+            <span class="opt-emoji">⚡</span>
+            <div class="opt-label">Dưới 10 phút</div>
+            <div class="opt-sub">Cực nhanh</div>
+          </div>
+          <div class="quiz-opt " onclick="selectOpt(1)">
+            <span class="opt-emoji">🕐</span>
+            <div class="opt-label">10–20 phút</div>
+            <div class="opt-sub">Vừa phải</div>
+          </div>
+          <div class="quiz-opt " onclick="selectOpt(2)">
+            <span class="opt-emoji">🍳</span>
+            <div class="opt-label">Tự nấu tại nhà</div>
+            <div class="opt-sub">Có thời gian</div>
+          </div>
+          <div class="quiz-opt " onclick="selectOpt(3)">
+            <span class="opt-emoji">🏃</span>
+            <div class="opt-label">Không có thời gian</div>
+            <div class="opt-sub">Bỏ bữa không nên!</div>
+          </div>
+      </div>
+    </div></div>
+    <div class="quiz-nav">
+      <button class="q-btn" id="q-back" onclick="quizBack()" disabled="">← Quay lại</button>
+      <button class="q-btn primary" id="q-next" onclick="quizNext()">Tiếp theo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT PAGE -->
+<div class="page" id="page-result">
+  <div class="result-container">
+    <div class="result-header">
+      <div class="result-badge-row" id="result-badges"></div>
+      <h2>Đây là gợi ý dành riêng cho bạn! 🎯</h2>
+      <p>Dựa trên sở thích, ngân sách và thói quen của bạn</p>
+    </div>
+    <div class="result-cards" id="result-cards"></div>
+    <div class="result-actions">
+      <button class="ra-btn" onclick="showPage('quiz')">🔄 Gợi ý lại</button>
+      <button class="ra-btn primary" onclick="showPage('home')">🏠 Về trang chủ</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESTAURANT MODAL -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-food-name" id="modal-food-name">Tên món</div>
+        <div style="font-size:.85rem;color:var(--text-muted);margin-top:2px" id="modal-food-info"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="location-row">
+      <input type="text" id="user-location" placeholder="📍 Nhập địa chỉ của bạn (vd: 144 Xuân Thủy, Thủ Đức)">
+      <button onclick="calcDistances()">Tính khoảng cách</button>
+    </div>
+    <div class="rest-grid" id="rest-grid"></div>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <div class="admin-wrap">
+    <button class="admin-back" onclick="showPage('home')">← Về trang chủ</button>
+    <div class="admin-hdr">
+      <h2>⚙️ Quản lý món ăn</h2>
+      <div style="display:flex;gap:8px">
+        <button class="btn-add" style="background:#1e293b;border-color:#1e293b" onclick="openUserResults()">👥 Kết quả người dùng</button>
+        <button class="btn-add" onclick="openAdminForm(null)">+ Thêm món mới</button>
+      </div>
+    </div>
+    <div class="admin-stats" id="admin-stats"></div>
+    <div class="admin-filter-row">
+      <input class="admin-search" type="text" id="admin-search" placeholder="🔍 Tìm tên món, danh mục..." oninput="renderAdminTable()">
+      <select id="admin-cat-filter" onchange="renderAdminTable()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;font-family:inherit;outline:none;cursor:pointer">
+        <option value="">Tất cả danh mục</option>
+      </select>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Món ăn</th>
+            <th>Danh mục</th>
+            <th>Giá</th>
+            <th>Rating</th>
+            <th>Thời gian</th>
+            <th>Ngân sách</th>
+            <th>Healthy</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="admin-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- USER RESULTS MODAL -->
+<div id="user-results-modal">
+  <div class="ur-box">
+    <div class="ur-title">
+      <span>👥 Danh sách kết quả người dùng</span>
+      <button class="modal-close" onclick="closeUserResults()">✕</button>
+    </div>
+    <div id="ur-list"></div>
+  </div>
+</div>
+
+<!-- ADMIN FOOD FORM MODAL -->
+<div id="admin-modal">
+  <div class="admin-form-box">
+    <div class="admin-form-title">
+      <span id="admin-form-title-text">Thêm món mới</span>
+      <button class="modal-close" onclick="closeAdminForm()">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg">
+        <label>Emoji</label>
+        <input type="text" id="af-emoji" placeholder="🍗">
+      </div>
+      <div class="fg">
+        <label>Tên món ăn</label>
+        <input type="text" id="af-name" placeholder="Cơm Gà Xối Mỡ">
+      </div>
+      <div class="fg">
+        <label>Danh mục</label>
+        <select id="af-cat">
+          <option value="Cơm">Cơm</option>
+          <option value="Bún/Phở">Bún/Phở</option>
+          <option value="Gà Rán">Gà Rán</option>
+          <option value="Bánh Mì">Bánh Mì</option>
+          <option value="Ăn Chay">Ăn Chay</option>
+          <option value="Healthy">Healthy</option>
+          <option value="Đồ Uống">Đồ Uống</option>
+          <option value="Ăn Vặt">Ăn Vặt</option>
+          <option value="Hàn Quốc">Hàn Quốc</option>
+          <option value="Pizza &amp; Ý">Pizza &amp; Ý</option>
+          <option value="Nhật Bản">Nhật Bản</option>
+          <option value="Tự Nấu">Tự Nấu</option>
+          <option value="Đặc Sản">Đặc Sản</option>
+          <option value="Tráng Miệng">Tráng Miệng</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Giá (VNĐ)</label>
+        <input type="number" id="af-price" placeholder="28000" min="1000" step="1000">
+      </div>
+      <div class="fg">
+        <label>Rating (0–5)</label>
+        <input type="number" id="af-rating" placeholder="4.7" min="0" max="5" step="0.1">
+      </div>
+      <div class="fg">
+        <label>Khẩu vị</label>
+        <select id="af-flavor">
+          <option value="mặn">Mặn</option>
+          <option value="cay">Cay</option>
+          <option value="nhẹ">Nhẹ</option>
+          <option value="ngọt">Ngọt</option>
+          <option value="chua">Chua</option>
+          <option value="đắng">Đắng</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Thời gian</label>
+        <select id="af-time">
+          <option value="nhanh">⚡ Nhanh (&lt;10 phút)</option>
+          <option value="vừa">🕐 Vừa (10–20 phút)</option>
+          <option value="lâu">🍳 Lâu (tự nấu)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Ngân sách</label>
+        <select id="af-budget">
+          <option value="low">💚 Thấp (&lt;20k)</option>
+          <option value="mid">💛 Trung (20k–45k)</option>
+          <option value="high">🧡 Cao (&gt;45k)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Healthy (1–5)</label>
+        <select id="af-healthy">
+          <option value="1">1 – Không healthy</option>
+          <option value="2">2 – Ít healthy</option>
+          <option value="3">3 – Trung bình</option>
+          <option value="4">4 – Khá healthy</option>
+          <option value="5">5 – Rất healthy</option>
+        </select>
+      </div>
+      <div class="fg full">
+        <label>Tags (cách nhau bằng dấu phẩy)</label>
+        <input type="text" id="af-tags" placeholder="Mặn, Việt, Giòn">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-cancel" onclick="closeAdminForm()">Huỷ</button>
+      <button class="btn-save" onclick="saveAdminForm()">💾 Lưu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const USERS_KEY = 'hnag_users';
+const SESSION_KEY = 'hnag_session';
+const RESULT_KEY = 'hnag_results';
+
+// Seed demo + admin user
+(function(){
+  let users = JSON.parse(localStorage.getItem(USERS_KEY)||'[]');
+  if(!users.find(u=>u.email==='demo@sv.com')){
+    users.push({email:'demo@sv.com',password:'123456',name:'Demo Sinh Viên',type:'sv_suckhoe'});
+  }
+  if(!users.find(u=>u.email==='admin@sv.com')){
+    users.push({email:'admin@sv.com',password:'admin123',name:'Admin',type:'admin'});
+  }
+  localStorage.setItem(USERS_KEY,JSON.stringify(users));
+})();
+
+// ===== 100 FOODS =====
+const DEFAULT_FOODS = [
+  // CƠM
+  {id:1,name:'Cơm Gà Xối Mỡ',cat:'Cơm',emoji:'🍗',price:28000,rating:4.9,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:3,budget:'mid'},
+  {id:2,name:'Cơm Tấm Sườn Bì',cat:'Cơm',emoji:'🍖',price:35000,rating:4.8,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:3,budget:'mid'},
+  {id:3,name:'Cơm Chiên Dương Châu',cat:'Cơm',emoji:'🍳',price:25000,rating:4.6,tags:['Mặn','Đông Á'],flavor:'mặn',time:'nhanh',healthy:2,budget:'low'},
+  {id:4,name:'Cơm Rang Dưa Bò',cat:'Cơm',emoji:'🥩',price:30000,rating:4.7,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:3,budget:'mid'},
+  {id:5,name:'Cơm Hộp Văn Phòng',cat:'Cơm',emoji:'🍱',price:22000,rating:4.4,tags:['Cân bằng','Việt'],flavor:'mặn',time:'nhanh',healthy:4,budget:'low'},
+  {id:6,name:'Cơm Gà Hải Nam',cat:'Cơm',emoji:'🍚',price:45000,rating:4.8,tags:['Mặn','Hoa'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:7,name:'Cơm Niêu Than Hồng',cat:'Cơm',emoji:'🫙',price:40000,rating:4.7,tags:['Mặn','Việt'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:8,name:'Cơm Bò Lúc Lắc',cat:'Cơm',emoji:'🥩',price:55000,rating:4.9,tags:['Mặn','Việt'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:9,name:'Cơm Cuộn Kimbap',cat:'Cơm',emoji:'🍙',price:35000,rating:4.7,tags:['Nhẹ','Hàn'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'mid'},
+  {id:10,name:'Cơm Chiên Trứng Muối',cat:'Cơm',emoji:'🥚',price:28000,rating:4.5,tags:['Mặn','Đông Á'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  // BÚN PHỞ
+  {id:11,name:'Phở Bò Tái Nam',cat:'Bún/Phở',emoji:'🍜',price:45000,rating:4.9,tags:['Nước','Việt'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'high'},
+  {id:12,name:'Bún Bò Huế',cat:'Bún/Phở',emoji:'🌶️',price:40000,rating:4.8,tags:['Cay','Việt'],flavor:'cay',time:'vừa',healthy:4,budget:'mid'},
+  {id:13,name:'Bún Riêu Cua',cat:'Bún/Phở',emoji:'🦀',price:38000,rating:4.7,tags:['Chua','Việt'],flavor:'chua',time:'vừa',healthy:5,budget:'mid'},
+  {id:14,name:'Bánh Canh Cua',cat:'Bún/Phở',emoji:'🦀',price:42000,rating:4.8,tags:['Nước','Việt'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'high'},
+  {id:15,name:'Hủ Tiếu Nam Vang',cat:'Bún/Phở',emoji:'🍝',price:40000,rating:4.7,tags:['Nước','Việt'],flavor:'nhẹ',time:'vừa',healthy:4,budget:'mid'},
+  {id:16,name:'Mì Quảng',cat:'Bún/Phở',emoji:'🍜',price:35000,rating:4.6,tags:['Cay nhẹ','Việt'],flavor:'cay',time:'vừa',healthy:4,budget:'mid'},
+  {id:17,name:'Bún Mắm',cat:'Bún/Phở',emoji:'🐟',price:38000,rating:4.5,tags:['Nước','Miền Tây'],flavor:'mặn',time:'vừa',healthy:4,budget:'mid'},
+  {id:18,name:'Phở Gà',cat:'Bún/Phở',emoji:'🍗',price:42000,rating:4.7,tags:['Nước','Việt'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'high'},
+  {id:19,name:'Bún Chả Hà Nội',cat:'Bún/Phở',emoji:'🥩',price:45000,rating:4.8,tags:['Mặn','Bắc'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:20,name:'Miến Gà',cat:'Bún/Phở',emoji:'🍗',price:35000,rating:4.6,tags:['Nước','Việt'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'mid'},
+  // GÀ RÁN & FAST FOOD
+  {id:21,name:'Gà Rán KFC',cat:'Gà Rán',emoji:'🍗',price:55000,rating:4.7,tags:['Giòn','Mỹ'],flavor:'mặn',time:'nhanh',healthy:2,budget:'high'},
+  {id:22,name:'Gà Rán Lotteria',cat:'Gà Rán',emoji:'🍗',price:50000,rating:4.5,tags:['Giòn','Hàn'],flavor:'mặn',time:'nhanh',healthy:2,budget:'high'},
+  {id:23,name:'Burger Bò Phô Mai',cat:'Gà Rán',emoji:'🍔',price:48000,rating:4.6,tags:['Mặn','Mỹ'],flavor:'mặn',time:'nhanh',healthy:2,budget:'high'},
+  {id:24,name:'Nuggets Gà',cat:'Gà Rán',emoji:'🐔',price:35000,rating:4.5,tags:['Giòn','Snack'],flavor:'mặn',time:'nhanh',healthy:2,budget:'mid'},
+  {id:25,name:'Hot Dog Xúc Xích',cat:'Gà Rán',emoji:'🌭',price:25000,rating:4.3,tags:['Nhanh','Snack'],flavor:'mặn',time:'nhanh',healthy:2,budget:'low'},
+  // BÁNH MÌ
+  {id:26,name:'Bánh Mì Thịt Nướng',cat:'Bánh Mì',emoji:'🥖',price:18000,rating:4.8,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  {id:27,name:'Bánh Mì Phá Lấu',cat:'Bánh Mì',emoji:'🥖',price:20000,rating:4.7,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  {id:28,name:'Bánh Mì Trứng Ốp La',cat:'Bánh Mì',emoji:'🍳',price:15000,rating:4.5,tags:['Nhẹ','Việt'],flavor:'nhẹ',time:'nhanh',healthy:3,budget:'low'},
+  {id:29,name:'Bánh Mì Chả Cá',cat:'Bánh Mì',emoji:'🐟',price:20000,rating:4.6,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  {id:30,name:'Bánh Mì Bơ Sữa',cat:'Bánh Mì',emoji:'🧈',price:12000,rating:4.3,tags:['Ngọt','Sáng'],flavor:'ngọt',time:'nhanh',healthy:2,budget:'low'},
+  // ĂN CHAY
+  {id:31,name:'Cơm Chay Tự Chọn',cat:'Ăn Chay',emoji:'🥦',price:20000,rating:4.6,tags:['Chay','Healthy'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'low'},
+  {id:32,name:'Bún Chay Nấm',cat:'Ăn Chay',emoji:'🍄',price:25000,rating:4.5,tags:['Chay','Nước'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'low'},
+  {id:33,name:'Mì Xào Rau Củ',cat:'Ăn Chay',emoji:'🥕',price:22000,rating:4.4,tags:['Chay','Việt'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'low'},
+  {id:34,name:'Bánh Mì Chay Pate',cat:'Ăn Chay',emoji:'🥖',price:15000,rating:4.5,tags:['Chay','Việt'],flavor:'nhẹ',time:'nhanh',healthy:4,budget:'low'},
+  {id:35,name:'Salad Quinoa Rau Củ',cat:'Ăn Chay',emoji:'🥗',price:40000,rating:4.7,tags:['Chay','Healthy'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'mid'},
+  // HEALTHY
+  {id:36,name:'Salad Gà Nướng',cat:'Healthy',emoji:'🥗',price:45000,rating:4.7,tags:['Healthy','Ít calo'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'high'},
+  {id:37,name:'Ức Gà Hấp Rau',cat:'Healthy',emoji:'🥦',price:38000,rating:4.6,tags:['Healthy','Gym'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'mid'},
+  {id:38,name:'Cơm Gạo Lứt + Cá',cat:'Healthy',emoji:'🐟',price:40000,rating:4.7,tags:['Healthy','Clean'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'mid'},
+  {id:39,name:'Granola Hoa Quả',cat:'Healthy',emoji:'🍓',price:35000,rating:4.5,tags:['Healthy','Sáng'],flavor:'ngọt',time:'nhanh',healthy:5,budget:'mid'},
+  {id:40,name:'Smoothie Bowl',cat:'Healthy',emoji:'🥣',price:42000,rating:4.6,tags:['Healthy','Ngọt'],flavor:'ngọt',time:'nhanh',healthy:5,budget:'high'},
+  // ĐỒ UỐNG & NƯỚC
+  {id:41,name:'Trà Sữa Trân Châu',cat:'Đồ Uống',emoji:'🧋',price:32000,rating:4.8,tags:['Ngọt','Phổ biến'],flavor:'ngọt',time:'nhanh',healthy:2,budget:'mid'},
+  {id:42,name:'Sinh Tố Xoài',cat:'Đồ Uống',emoji:'🥭',price:25000,rating:4.7,tags:['Ngọt','Trái cây'],flavor:'ngọt',time:'nhanh',healthy:4,budget:'low'},
+  {id:43,name:'Cà Phê Sữa Đá',cat:'Đồ Uống',emoji:'☕',price:18000,rating:4.8,tags:['Đắng','Việt'],flavor:'đắng',time:'nhanh',healthy:3,budget:'low'},
+  {id:44,name:'Nước Mía Tắc',cat:'Đồ Uống',emoji:'🍹',price:12000,rating:4.6,tags:['Ngọt','Chua'],flavor:'chua',time:'nhanh',healthy:3,budget:'low'},
+  {id:45,name:'Trà Đào Cam Sả',cat:'Đồ Uống',emoji:'🍑',price:28000,rating:4.7,tags:['Ngọt','Mát'],flavor:'ngọt',time:'nhanh',healthy:3,budget:'low'},
+  // ĐỒ ĂN VẶT & CHIÊN
+  {id:46,name:'Bánh Tráng Trộn',cat:'Ăn Vặt',emoji:'🌯',price:15000,rating:4.8,tags:['Cay','SV yêu thích'],flavor:'cay',time:'nhanh',healthy:2,budget:'low'},
+  {id:47,name:'Xiên Thịt Que Chiên',cat:'Ăn Vặt',emoji:'🍢',price:5000,rating:4.5,tags:['Chiên','Snack'],flavor:'mặn',time:'nhanh',healthy:2,budget:'low'},
+  {id:48,name:'Cá Viên Chiên',cat:'Ăn Vặt',emoji:'🐟',price:10000,rating:4.6,tags:['Chiên','Snack'],flavor:'mặn',time:'nhanh',healthy:2,budget:'low'},
+  {id:49,name:'Chả Giò Rế',cat:'Ăn Vặt',emoji:'🥟',price:20000,rating:4.7,tags:['Chiên','Việt'],flavor:'mặn',time:'nhanh',healthy:2,budget:'low'},
+  {id:50,name:'Khoai Lang Chiên',cat:'Ăn Vặt',emoji:'🍠',price:15000,rating:4.5,tags:['Chiên','Ngọt'],flavor:'ngọt',time:'nhanh',healthy:3,budget:'low'},
+  // HÀN QUỐC
+  {id:51,name:'Tteokbokki Cay',cat:'Hàn Quốc',emoji:'🌶️',price:45000,rating:4.8,tags:['Cay','Hàn'],flavor:'cay',time:'nhanh',healthy:3,budget:'high'},
+  {id:52,name:'Bibimbap',cat:'Hàn Quốc',emoji:'🍲',price:55000,rating:4.8,tags:['Cân bằng','Hàn'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'high'},
+  {id:53,name:'Ramyeon Hàn Quốc',cat:'Hàn Quốc',emoji:'🍜',price:35000,rating:4.6,tags:['Cay','Hàn'],flavor:'cay',time:'nhanh',healthy:3,budget:'mid'},
+  {id:54,name:'Korean Fried Chicken',cat:'Hàn Quốc',emoji:'🍗',price:60000,rating:4.8,tags:['Giòn','Hàn'],flavor:'mặn',time:'vừa',healthy:3,budget:'high'},
+  {id:55,name:'Bánh Bao Nhân Thịt',cat:'Hàn Quốc',emoji:'🥟',price:30000,rating:4.5,tags:['Nhẹ','Hàn'],flavor:'nhẹ',time:'nhanh',healthy:3,budget:'mid'},
+  // PIZZA & Ý
+  {id:56,name:'Pizza Bò Phô Mai',cat:'Pizza & Ý',emoji:'🍕',price:75000,rating:4.7,tags:['Mặn','Ý'],flavor:'mặn',time:'vừa',healthy:2,budget:'high'},
+  {id:57,name:'Mì Ý Carbonara',cat:'Pizza & Ý',emoji:'🍝',price:65000,rating:4.7,tags:['Kem','Ý'],flavor:'nhẹ',time:'vừa',healthy:3,budget:'high'},
+  {id:58,name:'Mì Ý Sốt Cà Chua',cat:'Pizza & Ý',emoji:'🍝',price:55000,rating:4.6,tags:['Chua','Ý'],flavor:'chua',time:'vừa',healthy:3,budget:'high'},
+  {id:59,name:'Calzone Nhân Hỗn Hợp',cat:'Pizza & Ý',emoji:'🫓',price:80000,rating:4.6,tags:['Mặn','Ý'],flavor:'mặn',time:'vừa',healthy:2,budget:'high'},
+  {id:60,name:'Bruschetta Cà Chua',cat:'Pizza & Ý',emoji:'🍅',price:40000,rating:4.5,tags:['Nhẹ','Khai vị'],flavor:'chua',time:'nhanh',healthy:4,budget:'mid'},
+  // NHẬT BẢN
+  {id:61,name:'Sushi Hỗn Hợp',cat:'Nhật Bản',emoji:'🍣',price:85000,rating:4.8,tags:['Nhẹ','Nhật'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'high'},
+  {id:62,name:'Ramen Tonkotsu',cat:'Nhật Bản',emoji:'🍜',price:65000,rating:4.8,tags:['Nước','Nhật'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:63,name:'Takoyaki Bạch Tuộc',cat:'Nhật Bản',emoji:'🐙',price:40000,rating:4.7,tags:['Nhẹ','Nhật'],flavor:'nhẹ',time:'nhanh',healthy:3,budget:'mid'},
+  {id:64,name:'Udon Nước Trong',cat:'Nhật Bản',emoji:'🍜',price:50000,rating:4.6,tags:['Nước','Nhật'],flavor:'nhẹ',time:'vừa',healthy:4,budget:'high'},
+  {id:65,name:'Tempura Tôm',cat:'Nhật Bản',emoji:'🦐',price:55000,rating:4.7,tags:['Chiên','Nhật'],flavor:'nhẹ',time:'vừa',healthy:3,budget:'high'},
+  // TỰ NẤU (nguyên liệu)
+  {id:66,name:'Mì Trứng Xào Rau',cat:'Tự Nấu',emoji:'🍳',price:12000,rating:4.5,tags:['Tự nấu','Nhanh'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  {id:67,name:'Cháo Trắng Trứng Muối',cat:'Tự Nấu',emoji:'🥣',price:10000,rating:4.4,tags:['Tự nấu','Ốm'],flavor:'nhẹ',time:'nhanh',healthy:4,budget:'low'},
+  {id:68,name:'Xào Rau Cải Tỏi',cat:'Tự Nấu',emoji:'🥬',price:8000,rating:4.3,tags:['Tự nấu','Healthy'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'low'},
+  {id:69,name:'Canh Bí Đỏ Nấu Tôm',cat:'Tự Nấu',emoji:'🎃',price:15000,rating:4.5,tags:['Tự nấu','Lành'],flavor:'nhẹ',time:'vừa',healthy:5,budget:'low'},
+  {id:70,name:'Trứng Chiên Cà Chua',cat:'Tự Nấu',emoji:'🥚',price:10000,rating:4.6,tags:['Tự nấu','Nhanh'],flavor:'mặn',time:'nhanh',healthy:4,budget:'low'},
+  // THÊM CÁC MÓN ĐẶC SẮC
+  {id:71,name:'Bánh Xèo Miền Tây',cat:'Đặc Sản',emoji:'🥞',price:30000,rating:4.7,tags:['Giòn','Miền Tây'],flavor:'mặn',time:'vừa',healthy:3,budget:'mid'},
+  {id:72,name:'Gỏi Cuốn Tôm Thịt',cat:'Đặc Sản',emoji:'🌯',price:20000,rating:4.6,tags:['Tươi','Việt'],flavor:'nhẹ',time:'nhanh',healthy:5,budget:'low'},
+  {id:73,name:'Nem Nướng Nha Trang',cat:'Đặc Sản',emoji:'🥩',price:35000,rating:4.8,tags:['Nướng','Miền Trung'],flavor:'mặn',time:'vừa',healthy:4,budget:'mid'},
+  {id:74,name:'Bò Né Sốt Tiêu Đen',cat:'Đặc Sản',emoji:'🥩',price:55000,rating:4.8,tags:['Nướng','Việt'],flavor:'mặn',time:'vừa',healthy:3,budget:'high'},
+  {id:75,name:'Lẩu Thái Tom Yum',cat:'Đặc Sản',emoji:'🍲',price:120000,rating:4.8,tags:['Cay','Thái'],flavor:'cay',time:'lâu',healthy:4,budget:'high'},
+  {id:76,name:'Lẩu Hải Sản',cat:'Đặc Sản',emoji:'🦞',price:150000,rating:4.9,tags:['Hải Sản','Nhóm'],flavor:'nhẹ',time:'lâu',healthy:5,budget:'high'},
+  {id:77,name:'Bún Thịt Nướng',cat:'Bún/Phở',emoji:'🥩',price:32000,rating:4.7,tags:['Mặn','Việt'],flavor:'mặn',time:'nhanh',healthy:4,budget:'mid'},
+  {id:78,name:'Hột Vịt Lộn Rau Răm',cat:'Ăn Vặt',emoji:'🥚',price:8000,rating:4.5,tags:['Độc đáo','Việt'],flavor:'nhẹ',time:'nhanh',healthy:3,budget:'low'},
+  {id:79,name:'Bánh Cuốn Hà Nội',cat:'Đặc Sản',emoji:'🫕',price:28000,rating:4.7,tags:['Nhẹ','Bắc'],flavor:'nhẹ',time:'nhanh',healthy:4,budget:'low'},
+  {id:80,name:'Cháo Lòng Heo',cat:'Bún/Phở',emoji:'🥣',price:30000,rating:4.6,tags:['Nước','Sáng'],flavor:'nhẹ',time:'nhanh',healthy:4,budget:'mid'},
+  {id:81,name:'Xôi Gà Xé',cat:'Đặc Sản',emoji:'🍚',price:22000,rating:4.7,tags:['Dẻo','Sáng'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  {id:82,name:'Xôi Xéo Mặn',cat:'Đặc Sản',emoji:'🌽',price:18000,rating:4.5,tags:['Dẻo','Bắc'],flavor:'mặn',time:'nhanh',healthy:3,budget:'low'},
+  {id:83,name:'Bánh Ướt Chả Lụa',cat:'Đặc Sản',emoji:'🫕',price:20000,rating:4.6,tags:['Nhẹ','Việt'],flavor:'nhẹ',time:'nhanh',healthy:4,budget:'low'},
+  {id:84,name:'Chè Đậu Xanh Nước Dừa',cat:'Tráng Miệng',emoji:'🍵',price:15000,rating:4.6,tags:['Ngọt','Mát'],flavor:'ngọt',time:'nhanh',healthy:3,budget:'low'},
+  {id:85,name:'Kem Xôi Chiên',cat:'Tráng Miệng',emoji:'🍦',price:20000,rating:4.7,tags:['Ngọt','Độc đáo'],flavor:'ngọt',time:'nhanh',healthy:2,budget:'low'},
+  {id:86,name:'Bánh Flan Caramen',cat:'Tráng Miệng',emoji:'🍮',price:18000,rating:4.7,tags:['Ngọt','Tây'],flavor:'ngọt',time:'nhanh',healthy:2,budget:'low'},
+  {id:87,name:'Bún Đậu Mắm Tôm',cat:'Đặc Sản',emoji:'🫘',price:35000,rating:4.6,tags:['Mặn','Bắc'],flavor:'mặn',time:'nhanh',healthy:3,budget:'mid'},
+  {id:88,name:'Cơm Âm Phủ Huế',cat:'Đặc Sản',emoji:'🍱',price:40000,rating:4.7,tags:['Cân bằng','Huế'],flavor:'mặn',time:'vừa',healthy:4,budget:'mid'},
+  {id:89,name:'Mì Hải Sản Xào',cat:'Đặc Sản',emoji:'🦑',price:45000,rating:4.7,tags:['Mặn','Đông Á'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:90,name:'Bánh Khọt Vũng Tàu',cat:'Đặc Sản',emoji:'🥞',price:30000,rating:4.8,tags:['Giòn','Miền Nam'],flavor:'nhẹ',time:'vừa',healthy:3,budget:'mid'},
+  {id:91,name:'Bánh Tráng Nướng Đà Lạt',cat:'Ăn Vặt',emoji:'🍕',price:15000,rating:4.8,tags:['Cay','Đà Lạt'],flavor:'cay',time:'nhanh',healthy:2,budget:'low'},
+  {id:92,name:'Súp Cua Bắp',cat:'Đặc Sản',emoji:'🦀',price:25000,rating:4.6,tags:['Nước','Nhẹ'],flavor:'nhẹ',time:'nhanh',healthy:4,budget:'low'},
+  {id:93,name:'Bắp Xào Bơ Tỏi',cat:'Ăn Vặt',emoji:'🌽',price:12000,rating:4.5,tags:['Ngọt','Nhẹ'],flavor:'ngọt',time:'nhanh',healthy:3,budget:'low'},
+  {id:94,name:'Đậu Hũ Chiên Sả Ớt',cat:'Ăn Chay',emoji:'🫘',price:18000,rating:4.5,tags:['Cay','Chay'],flavor:'cay',time:'nhanh',healthy:4,budget:'low'},
+  {id:95,name:'Mực Chiên Bơ Tỏi',cat:'Đặc Sản',emoji:'🦑',price:50000,rating:4.7,tags:['Mặn','Biển'],flavor:'mặn',time:'vừa',healthy:4,budget:'high'},
+  {id:96,name:'Tôm Hùm Nướng Phô Mai',cat:'Đặc Sản',emoji:'🦞',price:180000,rating:4.9,tags:['Sang','Biển'],flavor:'mặn',time:'vừa',healthy:5,budget:'high'},
+  {id:97,name:'Cơm Trộn Hàn Quốc',cat:'Hàn Quốc',emoji:'🥘',price:45000,rating:4.7,tags:['Cay nhẹ','Hàn'],flavor:'cay',time:'nhanh',healthy:4,budget:'high'},
+  {id:98,name:'Pad Thai Thái Lan',cat:'Đặc Sản',emoji:'🍜',price:50000,rating:4.7,tags:['Chua ngọt','Thái'],flavor:'chua',time:'vừa',healthy:4,budget:'high'},
+  {id:99,name:'Curry Cà Ri Ấn',cat:'Đặc Sản',emoji:'🍛',price:55000,rating:4.7,tags:['Cay','Ấn'],flavor:'cay',time:'vừa',healthy:4,budget:'high'},
+  {id:100,name:'Dim Sum Hỗn Hợp',cat:'Đặc Sản',emoji:'🥟',price:60000,rating:4.7,tags:['Nhẹ','Hoa'],flavor:'nhẹ',time:'vừa',healthy:4,budget:'high'},
+];
+
+let FOODS = JSON.parse(localStorage.getItem('hnag_foods')||'null') || DEFAULT_FOODS.map(f=>({...f}));
+function saveFoods(){ localStorage.setItem('hnag_foods', JSON.stringify(FOODS)); }
+
+// ===== RESTAURANTS DATA (with real TP.HCM coordinates) =====
+// Each branch has {addr, lat, lng, rating, reviews}
+const RESTAURANT_CHAINS = {
+  'KFC': {emoji:'🍗', branches:[
+    {addr:'Vincom Thủ Đức, Võ Văn Ngân',lat:10.8507,lng:106.7717,rating:4.3,reviews:312},
+    {addr:'Aeon Mall Bình Dương, ĐL Bình Dương',lat:10.9800,lng:106.6600,rating:4.1,reviews:198},
+    {addr:'Crescent Mall, Nguyễn Văn Linh Q7',lat:10.7285,lng:106.7212,rating:4.4,reviews:421},
+    {addr:'Vincom Đồng Khởi, Q1',lat:10.7752,lng:106.7021,rating:4.5,reviews:503},
+    {addr:'Gigamall, Xa Lộ Hà Nội Thủ Đức',lat:10.8380,lng:106.7600,rating:4.2,reviews:267},
+    {addr:'Lotte Mart Nam Sài Gòn Q7',lat:10.7315,lng:106.7010,rating:4.3,reviews:189},
+    {addr:'Aeon Mall Tân Phú, Bờ Bao Tân Thắng',lat:10.7955,lng:106.6280,rating:4.4,reviews:344},
+  ]},
+  'Lotteria': {emoji:'🍔', branches:[
+    {addr:'Parkson Hùng Vương, Q5',lat:10.7535,lng:106.6656,rating:4.0,reviews:156},
+    {addr:'BigC Hoàng Văn Thụ, Q. Phú Nhuận',lat:10.8003,lng:106.6832,rating:4.1,reviews:203},
+    {addr:'Vincom Center, Lê Thánh Tôn Q1',lat:10.7769,lng:106.7009,rating:4.3,reviews:387},
+    {addr:'Lotte Mart Q7, Nguyễn Thị Thập',lat:10.7315,lng:106.7010,rating:4.0,reviews:142},
+    {addr:'The Garden Mall, Hồng Bàng Q5',lat:10.7520,lng:106.6620,rating:4.2,reviews:221},
+    {addr:'Maximark Cộng Hoà, Tân Bình',lat:10.8020,lng:106.6570,rating:4.1,reviews:178},
+    {addr:'Nowzone Mall, Nguyễn Văn Trỗi Phú Nhuận',lat:10.7990,lng:106.6880,rating:4.2,reviews:255},
+  ]},
+  'Phở 24': {emoji:'🍜', branches:[
+    {addr:'12 Võ Văn Tần, Q3',lat:10.7750,lng:106.6895,rating:4.6,reviews:289},
+    {addr:'Saigon Centre, Lê Lợi Q1',lat:10.7731,lng:106.6988,rating:4.7,reviews:412},
+    {addr:'Crescent Mall, Q7',lat:10.7285,lng:106.7212,rating:4.5,reviews:198},
+    {addr:'Vincom Đồng Khởi, Q1',lat:10.7752,lng:106.7021,rating:4.6,reviews:334},
+    {addr:'Parkson Cantavil, Q2',lat:10.7900,lng:106.7450,rating:4.5,reviews:167},
+  ]},
+  'Bún Bò Gánh': {emoji:'🌶️', branches:[
+    {addr:'15 Đinh Tiên Hoàng, Q1',lat:10.7876,lng:106.6975,rating:4.7,reviews:523},
+    {addr:'45 Trần Quốc Tuấn, Q3',lat:10.7720,lng:106.6850,rating:4.6,reviews:312},
+    {addr:'88 Huỳnh Tấn Phát, Q7',lat:10.7390,lng:106.7120,rating:4.5,reviews:198},
+    {addr:'23 Lý Thường Kiệt, Q10',lat:10.7682,lng:106.6680,rating:4.6,reviews:267},
+  ]},
+  'Cơm Tấm 3 Miền': {emoji:'🍖', branches:[
+    {addr:'103 Trần Hưng Đạo, Q1',lat:10.7640,lng:106.6907,rating:4.7,reviews:631},
+    {addr:'67 Nguyễn Thị Minh Khai, Q3',lat:10.7790,lng:106.6943,rating:4.6,reviews:445},
+    {addr:'200 Cách Mạng Tháng 8, Q3',lat:10.7742,lng:106.6822,rating:4.5,reviews:312},
+    {addr:'12 Nguyễn Trãi, Q5',lat:10.7552,lng:106.6718,rating:4.6,reviews:289},
+  ]},
+  'Cơm Nhà Bếp': {emoji:'🍚', branches:[
+    {addr:'56 Võ Thị Sáu, Q3',lat:10.7876,lng:106.6934,rating:4.5,reviews:187},
+    {addr:'89 Nguyễn Đình Chiểu, Q3',lat:10.7820,lng:106.6910,rating:4.4,reviews:143},
+    {addr:'34 Lý Chính Thắng, Q3',lat:10.7798,lng:106.6870,rating:4.4,reviews:162},
+    {addr:'120 Nam Kỳ Khởi Nghĩa, Q3',lat:10.7755,lng:106.6928,rating:4.5,reviews:201},
+  ]},
+  'Quán Ăn Vặt 7749': {emoji:'🌯', branches:[
+    {addr:'Trước ĐH Bách Khoa, Lý Thường Kiệt Q10',lat:10.7722,lng:106.6580,rating:4.8,reviews:892},
+    {addr:'Trước ĐH KHTN, Nguyễn Văn Cừ Q5',lat:10.7625,lng:106.6815,rating:4.7,reviews:743},
+    {addr:'Cổng ĐH Kinh Tế, Đinh Tiên Hoàng Q1',lat:10.7874,lng:106.6968,rating:4.7,reviews:612},
+    {addr:'Trước ĐH Sư Phạm TP.HCM, An Dương Vương Q5',lat:10.7598,lng:106.6673,rating:4.8,reviews:534},
+  ]},
+  'Trà Sữa TocoToco': {emoji:'🧋', branches:[
+    {addr:'33 Lê Lợi, Q1',lat:10.7731,lng:106.6983,rating:4.5,reviews:423},
+    {addr:'Vincom Thủ Đức',lat:10.8507,lng:106.7717,rating:4.4,reviews:267},
+    {addr:'78 Phạm Văn Đồng, Bình Thạnh',lat:10.8120,lng:106.7050,rating:4.4,reviews:198},
+    {addr:'45 Nguyễn Huệ, Q1',lat:10.7745,lng:106.7028,rating:4.6,reviews:356},
+  ]},
+  'The Coffee House': {emoji:'☕', branches:[
+    {addr:'71 Nguyễn Huệ, Q1',lat:10.7745,lng:106.7028,rating:4.7,reviews:1203},
+    {addr:'5 Phạm Ngọc Thạch, Q3',lat:10.7884,lng:106.6960,rating:4.6,reviews:876},
+    {addr:'Crescent Mall, Q7',lat:10.7285,lng:106.7212,rating:4.5,reviews:512},
+    {addr:'Vincom Landmark 81, Bình Thạnh',lat:10.7950,lng:106.7220,rating:4.7,reviews:934},
+    {addr:'187 Đinh Tiên Hoàng, Bình Thạnh',lat:10.8020,lng:106.7150,rating:4.5,reviews:423},
+  ]},
+  'Sushi Hokkaido': {emoji:'🍣', branches:[
+    {addr:'9 Đinh Tiên Hoàng, Q1',lat:10.7876,lng:106.6975,rating:4.6,reviews:312},
+    {addr:'Vincom Đồng Khởi, Q1',lat:10.7752,lng:106.7021,rating:4.7,reviews:421},
+    {addr:'Nowzone Mall, Phú Nhuận',lat:10.7990,lng:106.6880,rating:4.5,reviews:198},
+  ]},
+  'Cơm Chay Quán Gần': {emoji:'🥦', branches:[
+    {addr:'12 Trương Định, Q3',lat:10.7800,lng:106.6920,rating:4.5,reviews:234},
+    {addr:'67 Lý Thái Tổ, Q10',lat:10.7682,lng:106.6665,rating:4.4,reviews:178},
+    {addr:'89 Âu Cơ, Q11',lat:10.7680,lng:106.6540,rating:4.5,reviews:201},
+    {addr:'24 Tân Sơn Nhì, Tân Phú',lat:10.7920,lng:106.6320,rating:4.3,reviews:156},
+  ]},
+  'Chuỗi Bánh Mì Bà Huyện': {emoji:'🥖', branches:[
+    {addr:'Góc Đinh Tiên Hoàng - Võ Thị Sáu, Q1',lat:10.7860,lng:106.6970,rating:4.8,reviews:567},
+    {addr:'105 Bùi Viện, Q1',lat:10.7686,lng:106.6933,rating:4.7,reviews:423},
+    {addr:'Gần BV Thống Nhất, Lý Thường Kiệt Q10',lat:10.7710,lng:106.6650,rating:4.7,reviews:389},
+    {addr:'Nguyễn Oanh, Gò Vấp',lat:10.8310,lng:106.6940,rating:4.6,reviews:312},
+  ]},
+};
+
+// ===== DISTRICT COORDINATES (trung tâm từng quận TP.HCM) =====
+const DISTRICT_COORDS = {
+  'q1':  {lat:10.7769, lng:106.7009}, 'quận 1':  {lat:10.7769, lng:106.7009},
+  'q2':  {lat:10.7900, lng:106.7450}, 'quận 2':  {lat:10.7900, lng:106.7450},
+  'q3':  {lat:10.7800, lng:106.6920}, 'quận 3':  {lat:10.7800, lng:106.6920},
+  'q4':  {lat:10.7560, lng:106.7050}, 'quận 4':  {lat:10.7560, lng:106.7050},
+  'q5':  {lat:10.7550, lng:106.6680}, 'quận 5':  {lat:10.7550, lng:106.6680},
+  'q6':  {lat:10.7480, lng:106.6340}, 'quận 6':  {lat:10.7480, lng:106.6340},
+  'q7':  {lat:10.7350, lng:106.7130}, 'quận 7':  {lat:10.7350, lng:106.7130},
+  'q8':  {lat:10.7230, lng:106.6280}, 'quận 8':  {lat:10.7230, lng:106.6280},
+  'q9':  {lat:10.8430, lng:106.7900}, 'quận 9':  {lat:10.8430, lng:106.7900},
+  'q10': {lat:10.7720, lng:106.6650}, 'quận 10': {lat:10.7720, lng:106.6650},
+  'q11': {lat:10.7660, lng:106.6510}, 'quận 11': {lat:10.7660, lng:106.6510},
+  'q12': {lat:10.8640, lng:106.6440}, 'quận 12': {lat:10.8640, lng:106.6440},
+  'bình thạnh': {lat:10.8060, lng:106.7130}, 'binh thanh': {lat:10.8060, lng:106.7130},
+  'phú nhuận':  {lat:10.7990, lng:106.6890}, 'phu nhuan':  {lat:10.7990, lng:106.6890},
+  'gò vấp':     {lat:10.8380, lng:106.6650}, 'go vap':     {lat:10.8380, lng:106.6650},
+  'tân bình':   {lat:10.8020, lng:106.6530}, 'tan binh':   {lat:10.8020, lng:106.6530},
+  'tân phú':    {lat:10.7910, lng:106.6290}, 'tan phu':    {lat:10.7910, lng:106.6290},
+  'bình tân':   {lat:10.7640, lng:106.6020}, 'binh tan':   {lat:10.7640, lng:106.6020},
+  'thủ đức':    {lat:10.8507, lng:106.7717}, 'thu duc':    {lat:10.8507, lng:106.7717},
+  'bình dương': {lat:10.9804, lng:106.6519}, 'binh duong': {lat:10.9804, lng:106.6519},
+  'nhà bè':     {lat:10.6921, lng:106.7368}, 'nha be':     {lat:10.6921, lng:106.7368},
+  'hóc môn':    {lat:10.8910, lng:106.5980}, 'hoc mon':    {lat:10.8910, lng:106.5980},
+  'củ chi':     {lat:11.0100, lng:106.4960}, 'cu chi':     {lat:11.0100, lng:106.4960},
+};
+
+// Known landmark coordinates
+const LANDMARK_COORDS = {
+  'bách khoa': {lat:10.7722, lng:106.6580},
+  'đh bách khoa': {lat:10.7722, lng:106.6580},
+  'đại học bách khoa': {lat:10.7722, lng:106.6580},
+  'uth': {lat:10.8507, lng:106.7717},
+  'đh uth': {lat:10.8507, lng:106.7717},
+  'đh kinh tế': {lat:10.7874, lng:106.6968},
+  'vincom đồng khởi': {lat:10.7752, lng:106.7021},
+  'vincom thủ đức': {lat:10.8507, lng:106.7717},
+  'aeon tân phú': {lat:10.7955, lng:106.6280},
+  'crescent mall': {lat:10.7285, lng:106.7212},
+  'lotte mart q7': {lat:10.7315, lng:106.7010},
+  'landmark 81': {lat:10.7950, lng:106.7220},
+  'nguyễn huệ': {lat:10.7745, lng:106.7028},
+  'bến thành': {lat:10.7720, lng:106.6980},
+  'tao đàn': {lat:10.7790, lng:106.6910},
+};
+
+// ===== HAVERSINE DISTANCE (km) =====
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return +(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))).toFixed(1);
+}
+
+// ===== PARSE ADDRESS → {lat, lng} =====
+function parseUserCoords(input) {
+  const s = input.toLowerCase().trim();
+  // Check landmarks first
+  for (const [key, coord] of Object.entries(LANDMARK_COORDS)) {
+    if (s.includes(key)) return coord;
+  }
+  // Check districts
+  for (const [key, coord] of Object.entries(DISTRICT_COORDS)) {
+    if (s.includes(key)) return coord;
+  }
+  // Fallback: center HCMC
+  return {lat: 10.7769, lng: 106.7009};
+}
+
+// Map food categories to restaurant chains
+function getRestaurantsForFood(food) {
+  const map = {
+    'Gà Rán': ['KFC','Lotteria'],
+    'Bún/Phở': ['Phở 24','Bún Bò Gánh'],
+    'Cơm': ['Cơm Tấm 3 Miền','Cơm Nhà Bếp'],
+    'Ăn Vặt': ['Quán Ăn Vặt 7749'],
+    'Đồ Uống': ['Trà Sữa TocoToco','The Coffee House'],
+    'Nhật Bản': ['Sushi Hokkaido'],
+    'Ăn Chay': ['Cơm Chay Quán Gần'],
+    'Bánh Mì': ['Chuỗi Bánh Mì Bà Huyện'],
+  };
+  const chains = map[food.cat] || ['Cơm Nhà Bếp','Quán Ăn Vặt 7749'];
+  // Add some generic ones
+  if(food.price < 20000) chains.push('Quán Ăn Vặt 7749');
+  return [...new Set(chains)];
+}
+
+// ===== AUTH =====
+let currentUser = JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');
+function switchTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.auth-tab')[tab==='login'?0:1].classList.add('active');
+  document.getElementById('login-form').style.display = tab==='login'?'block':'none';
+  document.getElementById('register-form').style.display = tab==='register'?'block':'none';
+  document.getElementById('auth-heading-login').style.display = tab==='login'?'block':'none';
+  document.getElementById('auth-heading-register').style.display = tab==='register'?'block':'none';
+}
+function showToast(msg,type='error'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className='toast '+type;
+  t.textContent=msg;
+  c.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3200);
+}
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pw=document.getElementById('login-pw').value;
+  if(!EMAIL_RE.test(email)){showToast('Email không đúng định dạng!','warning');return;}
+  const users=JSON.parse(localStorage.getItem(USERS_KEY)||'[]');
+  const user=users.find(u=>u.email===email&&u.password===pw);
+  if(!user){showToast('Email hoặc mật khẩu không đúng!','error');return;}
+  loginSuccess(user);
+}
+function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pw=document.getElementById('reg-pw').value;
+  const type=document.getElementById('reg-type').value;
+  if(!name){showToast('Vui lòng nhập họ tên!','warning');return;}
+  if(!EMAIL_RE.test(email)){showToast('Email không đúng định dạng! (vd: abc@gmail.com)','warning');return;}
+  if(pw.length<6){showToast('Mật khẩu phải có ít nhất 6 ký tự!','warning');return;}
+  let users=JSON.parse(localStorage.getItem(USERS_KEY)||'[]');
+  if(users.find(u=>u.email===email)){showToast('Email này đã được đăng ký!','error');return;}
+  const user={email,password:pw,name,type};
+  users.push(user);
+  localStorage.setItem(USERS_KEY,JSON.stringify(users));
+  loginSuccess(user);
+}
+function loginSuccess(user){
+  currentUser=user;
+  sessionStorage.setItem(SESSION_KEY,JSON.stringify(user));
+  document.getElementById('auth-overlay').style.display='none';
+  document.getElementById('nav-auth-btns').style.display='none';
+  document.getElementById('nav-user').style.display='flex';
+  document.getElementById('page-nav').style.display='flex';
+  document.getElementById('user-avatar').textContent=user.name[0].toUpperCase();
+  document.getElementById('user-name-display').textContent=user.name.split(' ').slice(-1)[0];
+  document.getElementById('nav-admin-btn').style.display=user.type==='admin'?'inline-flex':'none';
+}
+function doLogout(){
+  currentUser=null;
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+// ===== PAGE NAV =====
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));
+  const btns={home:0,quiz:1,result:2};
+  if(btns[id]!==undefined) document.querySelectorAll('.page-btn')[btns[id]].classList.add('active');
+  if(id==='result'&&!quizDone) {showPage('quiz');return;}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== HOME GRID =====
+const CATS = ['Tất cả',...new Set(FOODS.map(f=>f.cat))];
+let activeCat='Tất cả';
+let activeSearch='';
+let sideFilters={flavor:[],time:[],budget:[],minHealthy:1,minRating:0};
+
+function renderCats(){
+  const el=document.getElementById('cat-row');
+  el.innerHTML=CATS.map(c=>`<button class="cat ${c===activeCat?'active':''}" onclick="setCat('${c}')">${c}</button>`).join('');
+}
+const PAGE_SIZE = 20;
+let currentPage = 1;
+
+function setCat(c){activeCat=c;currentPage=1;renderCats();renderGrid();}
+function clearFilter(){activeCat='Tất cả';activeSearch='';currentPage=1;document.getElementById('search-input').value='';renderCats();renderGrid();}
+function filterFoods(){activeSearch=document.getElementById('search-input').value.toLowerCase();currentPage=1;renderGrid();}
+
+function renderGrid(){
+  const sf=sideFilters;
+  const all=FOODS.filter(f=>{
+    if(activeCat!=='Tất cả'&&f.cat!==activeCat)return false;
+    if(activeSearch&&!f.name.toLowerCase().includes(activeSearch)&&!f.cat.toLowerCase().includes(activeSearch)&&!f.tags.join('').toLowerCase().includes(activeSearch))return false;
+    if(sf.flavor.length&&!sf.flavor.includes(f.flavor))return false;
+    if(sf.time.length&&!sf.time.includes(f.time))return false;
+    if(sf.budget.length&&!sf.budget.includes(f.budget))return false;
+    if(f.healthy<sf.minHealthy)return false;
+    if(f.rating<sf.minRating)return false;
+    return true;
+  });
+  const totalPages=Math.max(1,Math.ceil(all.length/PAGE_SIZE));
+  if(currentPage>totalPages)currentPage=totalPages;
+  const start=(currentPage-1)*PAGE_SIZE;
+  const foods=all.slice(start,start+PAGE_SIZE);
+  const fc=document.getElementById('filter-count');if(fc)fc.textContent=`${all.length} món`;
+  document.getElementById('food-grid').innerHTML=foods.map(f=>`
+    <div class="food-card" onclick="openModal(${f.id})">
+      ${f.price<20000?'<div class="food-badge">HOT</div>':''}
+      <div class="food-emoji-box" style="background:${emojiColor(f.cat)}">${f.emoji}</div>
+      <div class="food-body">
+        <div class="food-name">${f.name}</div>
+        <div class="food-cat">${f.cat}</div>
+        <div class="food-footer">
+          <div class="food-price">${f.price.toLocaleString('vi-VN')}đ</div>
+          <div class="food-rating">⭐ ${f.rating}</div>
+        </div>
+        <div class="food-tags">${f.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+  renderPagination(all.length,totalPages);
+}
+
+function renderPagination(total,totalPages){
+  const el=document.getElementById('pagination');
+  if(!el)return;
+  if(totalPages<=1){el.innerHTML='';return;}
+  const start=(currentPage-1)*PAGE_SIZE+1;
+  const end=Math.min(currentPage*PAGE_SIZE,total);
+  const pages=[];
+  for(let i=1;i<=totalPages;i++){
+    if(i===1||i===totalPages||Math.abs(i-currentPage)<=1)pages.push(i);
+    else if(pages[pages.length-1]!=='...')pages.push('...');
+  }
+  el.innerHTML=`
+    <div class="pagination">
+      <span class="pg-info">Hiển thị ${start}–${end} trong ${total} món</span>
+      <div class="pg-controls">
+        <button class="pg-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>
+        ${pages.map(p=>p==='...'
+          ?`<span class="pg-ellipsis">…</span>`
+          :`<button class="pg-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`
+        ).join('')}
+        <button class="pg-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>
+      </div>
+    </div>`;
+}
+
+function goPage(p){
+  currentPage=p;
+  renderGrid();
+  document.getElementById('food-grid').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function applyFilters(){
+  const getChecked=(name)=>[...document.querySelectorAll(`#sidebar-filter input[value="${name}"]`)].filter(el=>el.checked).map(el=>el.value);
+  sideFilters.flavor=[...document.querySelectorAll('#sf-flavor input:checked')].map(el=>el.value);
+  sideFilters.time=[...document.querySelectorAll('#sf-time input:checked')].map(el=>el.value);
+  sideFilters.budget=[...document.querySelectorAll('#sf-budget input:checked')].map(el=>el.value);
+  const hSlider=document.getElementById('sf-healthy-min');
+  sideFilters.minHealthy=hSlider?+hSlider.value:1;
+  const hVal=document.getElementById('sf-healthy-val');
+  if(hVal&&hSlider)hVal.textContent=`≥ ${hSlider.value}`;
+  const ratingChecked=[...document.querySelectorAll('#sf-rating input:checked')].map(el=>+el.value);
+  sideFilters.minRating=ratingChecked.length?Math.min(...ratingChecked):0;
+  currentPage=1;
+  renderGrid();
+}
+
+function clearAllFilters(){
+  document.querySelectorAll('#sidebar-filter input[type=checkbox]').forEach(el=>el.checked=false);
+  const h=document.getElementById('sf-healthy-min');if(h)h.value=1;
+  const hv=document.getElementById('sf-healthy-val');if(hv)hv.textContent='≥ 1';
+  sideFilters={flavor:[],time:[],budget:[],minHealthy:1,minRating:0};
+  activeCat='Tất cả';activeSearch='';currentPage=1;
+  document.getElementById('search-input').value='';
+  renderCats();renderGrid();
+}
+
+function toggleSection(id){
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function emojiColor(cat){
+  const map={'Cơm':'#fff3e0','Bún/Phở':'#e8f5e9','Gà Rán':'#fce4ec','Bánh Mì':'#fff8e1','Ăn Chay':'#e8f5e9','Healthy':'#e0f7fa','Đồ Uống':'#f3e5f5','Ăn Vặt':'#ffecd2','Hàn Quốc':'#fce4ec','Pizza & Ý':'#fff3e0','Nhật Bản':'#e8eaf6','Tự Nấu':'#f1f8e9','Đặc Sản':'#fff8e1','Tráng Miệng':'#fce4ec'};
+  return map[cat]||'#f5f5f5';
+}
+
+// ===== RESTAURANT MODAL =====
+let currentFood=null;
+function openModal(foodId){
+  currentFood=FOODS.find(f=>f.id===foodId);
+  document.getElementById('modal-food-name').textContent=`${currentFood.emoji} ${currentFood.name}`;
+  document.getElementById('modal-food-info').textContent=`${currentFood.cat} · ${currentFood.price.toLocaleString('vi-VN')}đ · ⭐ ${currentFood.rating}`;
+  renderRestaurants(null);
+  document.getElementById('user-location').value='';
+  document.querySelector('.location-row button').textContent='Tính khoảng cách';
+  document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal-overlay')||e.currentTarget.classList.contains('modal-close'))
+    document.getElementById('modal-overlay').classList.remove('show');
+}
+
+function renderRestaurants(userCoords){
+  const chains=getRestaurantsForFood(currentFood);
+  let branches=[];
+  chains.forEach(chain=>{
+    const info=RESTAURANT_CHAINS[chain];
+    if(!info)return;
+    info.branches.forEach(b=>{
+      const km=userCoords?haversine(userCoords.lat,userCoords.lng,b.lat,b.lng):null;
+      branches.push({chain,emoji:info.emoji,addr:b.addr,rating:b.rating,reviews:b.reviews,km});
+    });
+  });
+  // Sort by distance if available, else by rating
+  if(userCoords) branches.sort((a,b)=>a.km-b.km);
+  else branches.sort((a,b)=>b.rating-a.rating);
+
+  let html=branches.map(b=>{
+    const kmLabel=b.km!==null
+      ?`<div class="rest-km" style="background:${b.km<2?'#e8f5ed':b.km<5?'var(--orange-light)':'#f3e5f5'};color:${b.km<2?'var(--green)':b.km<5?'var(--orange)':'#7c3aed'}">~${b.km} km</div>`
+      :'<div class="rest-km" style="background:#e5e7eb;color:#888">Nhập địa chỉ</div>';
+    const walkLabel=b.km!==null?(b.km<1?'🚶 Đi bộ được':b.km<3?'🛵 Gần lắm':b.km<7?'🛵 Bình thường':'🚗 Hơi xa'):'';
+    const menuItems=generateMenuFor(b.chain,currentFood);
+    return `<div class="rest-card">
+      <div class="rest-name">${b.emoji} ${b.chain}</div>
+      <div class="rest-addr">📍 ${b.addr}</div>
+      <div class="rest-meta-row">
+        <div class="rest-stars">⭐ ${b.rating} (${b.reviews} đánh giá)</div>
+        ${kmLabel}
+      </div>
+      ${walkLabel?`<div style="font-size:.72rem;color:var(--text-muted);margin-top:4px">${walkLabel}</div>`:''}
+      <div class="rest-menu">Thực đơn: ${menuItems}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('rest-grid').innerHTML=html||'<p style="color:var(--text-muted);text-align:center;padding:20px">Chưa có dữ liệu quán</p>';
+}
+
+function generateMenuFor(chain,food){
+  const extras={
+    'KFC':['Gà giòn','Gà sốt cay','Burger Zinger','Nuggets','Khoai chiên'],
+    'Lotteria':['Burger bò','Gà rán Lotteria','Đùi gà','Hành vòng chiên','Soda'],
+    'Quán Ăn Vặt 7749':['Bánh tráng trộn','Cá viên chiên','Xiên thịt','Khoai lang chiên','Bắp xào'],
+    'Cơm Tấm 3 Miền':['Cơm tấm sườn','Cơm tấm bì chả','Cơm tấm gà','Bì cuốn'],
+    'Cơm Nhà Bếp':['Cơm chiên','Cơm rang','Cơm hộp văn phòng','Canh'],
+    'Trà Sữa TocoToco':['Trà sữa trân châu','Trà đào','Sinh tố xoài','Matcha','Sữa tươi trân châu'],
+    'The Coffee House':['Cà phê sữa đá','Bạc xỉu','Trà đào cam sả','Matcha đá xay'],
+  };
+  const list=extras[chain]||[food.name,'Đồ ăn kèm','Nước uống'];
+  const shuffled=list.sort(()=>Math.random()-.5).slice(0,3);
+  return shuffled.join(', ');
+}
+
+function calcDistances(){
+  const addr=document.getElementById('user-location').value.trim();
+  if(!addr){alert('Vui lòng nhập địa chỉ của bạn!\nVí dụ: Quận 3, Thủ Đức, Bình Thạnh, ĐH Bách Khoa...');return;}
+  const coords=parseUserCoords(addr);
+  renderRestaurants(coords);
+  // Show which zone was detected
+  const btn=document.querySelector('.location-row button');
+  btn.textContent='✅ Đã cập nhật';
+  setTimeout(()=>btn.textContent='Tính khoảng cách',2000);
+}
+
+// ===== QUIZ =====
+const QUESTIONS=[
+  {id:'time',icon:'⏱️',q:'Bạn có bao nhiêu thời gian cho bữa này?',opts:[
+    {v:'nhanh',emoji:'⚡',label:'Dưới 10 phút',sub:'Cực nhanh'},
+    {v:'vừa',emoji:'🕐',label:'10–20 phút',sub:'Vừa phải'},
+    {v:'lâu',emoji:'🍳',label:'Tự nấu tại nhà',sub:'Có thời gian'},
+    {v:'nhanh',emoji:'🏃',label:'Không có thời gian',sub:'Bỏ bữa không nên!'},
+  ]},
+  {id:'budget',icon:'💰',q:'Ngân sách bữa ăn hôm nay là bao nhiêu?',opts:[
+    {v:'low',emoji:'💚',label:'Dưới 20k',sub:'Sinh viên chính hiệu'},
+    {v:'mid',emoji:'💛',label:'20k – 45k',sub:'Vừa túi tiền'},
+    {v:'high',emoji:'🧡',label:'45k – 80k',sub:'Hôm nay sang chảnh'},
+    {v:'high',emoji:'💜',label:'Không quan tâm',sub:'Miễn ngon là được'},
+  ]},
+  {id:'flavor',icon:'👅',q:'Bạn đang thèm vị gì?',opts:[
+    {v:'mặn',emoji:'🧂',label:'Mặn mạnh',sub:'Cơm, thịt, mắm'},
+    {v:'cay',emoji:'🌶️',label:'Cay xé lưỡi',sub:'Tteokbokki, bún bò'},
+    {v:'nhẹ',emoji:'🥗',label:'Nhẹ nhàng',sub:'Rau, canh, thanh mát'},
+    {v:'ngọt',emoji:'🍮',label:'Ngọt ngào',sub:'Tráng miệng, trà sữa'},
+  ]},
+  {id:'healthy',icon:'🥦',q:'Hôm nay bạn chú trọng gì?',opts:[
+    {v:5,emoji:'💪',label:'Ăn healthy',sub:'Calo thấp, đủ chất'},
+    {v:3,emoji:'⚖️',label:'Cân bằng',sub:'Không quá kiêng khem'},
+    {v:2,emoji:'😋',label:'Ngon là được',sub:'Healthy không quan trọng'},
+    {v:4,emoji:'🍃',label:'Ăn chay hôm nay',sub:'Thanh thản tâm hồn'},
+  ]},
+];
+
+let quizAnswers={};
+let quizStep=0;
+let quizDone=false;
+
+function renderQuiz(){
+  const q=QUESTIONS[quizStep];
+  const pct=Math.round((quizStep/QUESTIONS.length)*100);
+  document.getElementById('q-step-label').textContent=`Câu ${quizStep+1} / ${QUESTIONS.length}`;
+  document.getElementById('q-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('q-back').disabled=quizStep===0;
+  document.getElementById('q-next').textContent=quizStep===QUESTIONS.length-1?'Xem kết quả 🎯':'Tiếp theo →';
+
+  document.getElementById('quiz-questions').innerHTML=`
+    <div class="quiz-q-card">
+      <div class="quiz-q-title"><span class="q-icon">${q.icon}</span>${q.q}</div>
+      <div class="quiz-opts">
+        ${q.opts.map((o,i)=>`
+          <div class="quiz-opt ${quizAnswers[q.id]===o.v&&quizAnswers['_idx_'+q.id]===i?'sel':''}" onclick="selectOpt(${i})">
+            <span class="opt-emoji">${o.emoji}</span>
+            <div class="opt-label">${o.label}</div>
+            <div class="opt-sub">${o.sub}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function selectOpt(i){
+  const q=QUESTIONS[quizStep];
+  quizAnswers[q.id]=q.opts[i].v;
+  quizAnswers['_idx_'+q.id]=i;
+  renderQuiz();
+}
+function quizNext(){
+  const q=QUESTIONS[quizStep];
+  if(quizAnswers[q.id]===undefined){alert('Vui lòng chọn một đáp án!');return;}
+  if(quizStep===QUESTIONS.length-1){generateResult();return;}
+  quizStep++;renderQuiz();
+}
+function quizBack(){if(quizStep>0){quizStep--;renderQuiz();}}
+
+// ===== RECOMMENDATION ENGINE =====
+const CHAY_CATS = ['Ăn Chay'];
+const CHAY_TAGS = ['Chay'];
+function isChay(f){ return CHAY_CATS.includes(f.cat) || f.tags.some(t=>CHAY_TAGS.includes(t)); }
+
+function generateResult(){
+  const {time,budget,flavor,healthy}=quizAnswers;
+  const wantChay = healthy===4;
+
+  // ĐIỀU KIỆN BẮT BUỘC: nếu chọn ăn chay → chỉ lấy món chay
+  let pool = wantChay ? FOODS.filter(f=>isChay(f)) : FOODS;
+
+  let scored=pool.map(f=>{
+    let score=0;
+    // 1. User data / preference match
+    if(f.flavor===flavor) score+=30;
+    else if(flavor==='nhẹ'&&['nhẹ','chua'].includes(f.flavor)) score+=15;
+    // 2. Behavior / budget
+    if(f.budget===budget) score+=25;
+    else if(budget==='high'&&f.budget==='mid') score+=10;
+    // 3. Food database / time
+    if(f.time===time) score+=20;
+    // 4. Healthy score
+    const healthyVal=typeof healthy==='number'?healthy:3;
+    const diff=Math.abs(f.healthy-healthyVal);
+    score+=Math.max(0,15-diff*5);
+    // 5. Rating bonus
+    score+=f.rating*2;
+    // Slight randomness for variety
+    score+=Math.random()*8;
+    return {...f,score:Math.round(score)};
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  const top=scored.slice(0,6);
+  renderResult(top);
+  quizDone=true;
+  if(currentUser){
+    let results=JSON.parse(localStorage.getItem(RESULT_KEY)||'[]');
+    results=results.filter(r=>r.email!==currentUser.email);
+    results.push({
+      email:currentUser.email,
+      name:currentUser.name,
+      answers:quizAnswers,
+      topFoods:top.map(f=>({id:f.id,name:f.name,emoji:f.emoji,score:f.score})),
+      savedAt:new Date().toISOString()
+    });
+    localStorage.setItem(RESULT_KEY,JSON.stringify(results));
+  }
+  showPage('result');
+}
+
+function renderResult(foods){
+  // Badges
+  const {time,budget,flavor,healthy}=quizAnswers;
+  const budgetLabel={low:'Dưới 20k',mid:'20k–45k',high:'45k+'}[budget]||'';
+  const flavorLabel={mặn:'Thích mặn',cay:'Thích cay',nhẹ:'Thích nhẹ',ngọt:'Thích ngọt'}[flavor]||'';
+  document.getElementById('result-badges').innerHTML=`
+    <div class="rbadge orange">💰 ${budgetLabel}</div>
+    <div class="rbadge orange">⏱️ ${time==='nhanh'?'Nhanh':'Có thể đợi'}</div>
+    <div class="rbadge green">👅 ${flavorLabel}</div>
+    ${healthy===4?'<div class="rbadge green">🥦 Ăn chay</div>':''}
+    ${healthy===5?'<div class="rbadge green">💪 Healthy</div>':''}
+  `;
+
+  document.getElementById('result-cards').innerHTML=foods.map((f,i)=>`
+    <div class="result-card ${i===0?'top':''}" onclick="openModal(${f.id})">
+      <div class="rc-rank">${['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'][i]}</div>
+      <div class="rc-emoji">${f.emoji}</div>
+      <div class="rc-info">
+        <div class="rc-name">
+          ${f.name}
+          ${i===0?'<span class="top-pill">Phù hợp nhất</span>':''}
+        </div>
+        <div class="rc-meta">${f.cat} · ${f.tags.join(' · ')}</div>
+        <div class="rc-tags2">
+          ${f.healthy>=4?'<span class="tag green">Healthy</span>':''}
+          ${f.time==='nhanh'?'<span class="tag">Nhanh</span>':''}
+          ${f.flavor===flavor?'<span class="tag">Đúng khẩu vị</span>':''}
+          ${f.budget===budget?'<span class="tag green">Đúng ngân sách</span>':''}
+        </div>
+        <div class="rc-score-bar"><div class="rc-score-fill" style="width:${Math.min(100,f.score)}%"></div></div>
+      </div>
+      <div class="rc-right">
+        <div class="rc-price2">${f.price.toLocaleString('vi-VN')}đ</div>
+        <div class="rc-match">⭐ ${f.rating}</div>
+        <div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">Điểm: ${f.score}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ===== ADMIN =====
+const ADMIN_CATS = ['Cơm','Bún/Phở','Gà Rán','Bánh Mì','Ăn Chay','Healthy','Đồ Uống','Ăn Vặt','Hàn Quốc','Pizza & Ý','Nhật Bản','Tự Nấu','Đặc Sản','Tráng Miệng'];
+
+function showAdminPage(){
+  if(!currentUser||currentUser.type!=='admin'){alert('Bạn không có quyền truy cập!');return;}
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-admin').classList.add('active');
+  document.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));
+  renderAdminStats();
+  renderAdminCatFilter();
+  renderAdminTable();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openUserResults(){
+  const results=JSON.parse(localStorage.getItem(RESULT_KEY)||'[]');
+  const budgetLabel={low:'Dưới 20k',mid:'20–45k',high:'45k+'};
+  const flavorLabel={mặn:'Mặn',cay:'Cay',nhẹ:'Nhẹ',ngọt:'Ngọt'};
+  const timeLabel={nhanh:'Nhanh',chậm:'Có thể đợi'};
+  const healthyLabel={1:'Bình thường',2:'Hơi healthy',3:'Cân bằng',4:'Ăn chay',5:'Rất healthy'};
+  const el=document.getElementById('ur-list');
+  if(!results.length){
+    el.innerHTML='<div class="ur-empty">Chưa có người dùng nào hoàn thành gợi ý.</div>';
+  } else {
+    el.innerHTML=results.slice().reverse().map(r=>{
+      const a=r.answers||{};
+      const d=new Date(r.savedAt);
+      const dateStr=d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      return `<div class="ur-item">
+        <div class="ur-item-hdr">
+          <div>
+            <div class="ur-name">${r.name}</div>
+            <div class="ur-email">${r.email}</div>
+          </div>
+          <div class="ur-time">${dateStr}</div>
+        </div>
+        <div class="ur-badges">
+          ${a.budget?`<span class="ur-badge">💰 ${budgetLabel[a.budget]||a.budget}</span>`:''}
+          ${a.time?`<span class="ur-badge">⏱️ ${timeLabel[a.time]||a.time}</span>`:''}
+          ${a.flavor?`<span class="ur-badge">👅 ${flavorLabel[a.flavor]||a.flavor}</span>`:''}
+          ${a.healthy?`<span class="ur-badge">💚 ${healthyLabel[a.healthy]||a.healthy}</span>`:''}
+        </div>
+        <div class="ur-foods">
+          ${(r.topFoods||[]).map((f,i)=>`<span class="ur-food${i===0?' top':''}">${f.emoji} ${f.name}</span>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('user-results-modal').classList.add('show');
+}
+function closeUserResults(){
+  document.getElementById('user-results-modal').classList.remove('show');
+}
+
+function renderAdminStats(){
+  const cats={};
+  FOODS.forEach(f=>{cats[f.cat]=(cats[f.cat]||0)+1;});
+  const topCat=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+  const avgPrice=Math.round(FOODS.reduce((s,f)=>s+f.price,0)/FOODS.length/1000);
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="admin-stat"><span class="admin-stat-n">${FOODS.length}</span><span class="admin-stat-l">Tổng món ăn</span></div>
+    <div class="admin-stat"><span class="admin-stat-n">${ADMIN_CATS.length}</span><span class="admin-stat-l">Danh mục</span></div>
+    <div class="admin-stat"><span class="admin-stat-n">${avgPrice}k</span><span class="admin-stat-l">Giá trung bình</span></div>
+    <div class="admin-stat"><span class="admin-stat-n">${topCat?topCat[0]:''}</span><span class="admin-stat-l">Nhiều món nhất</span></div>
+  `;
+}
+
+function renderAdminCatFilter(){
+  const sel=document.getElementById('admin-cat-filter');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Tất cả danh mục</option>'+
+    ADMIN_CATS.map(c=>`<option value="${c}"${cur===c?' selected':''}>${c}</option>`).join('');
+}
+
+function renderAdminTable(){
+  const search=(document.getElementById('admin-search').value||'').toLowerCase();
+  const catFilter=document.getElementById('admin-cat-filter').value;
+  const list=FOODS.filter(f=>{
+    const matchSearch=!search||f.name.toLowerCase().includes(search)||f.cat.toLowerCase().includes(search)||f.tags.join(' ').toLowerCase().includes(search);
+    const matchCat=!catFilter||f.cat===catFilter;
+    return matchSearch&&matchCat;
+  });
+  const timeLabel={nhanh:'⚡ Nhanh',vừa:'🕐 Vừa',lâu:'🍳 Lâu'};
+  const budgetLabel={low:'💚 Thấp',mid:'💛 Trung',high:'🧡 Cao'};
+  document.getElementById('admin-tbody').innerHTML=list.map((f,i)=>`
+    <tr>
+      <td style="color:var(--text-muted);font-size:.8rem">${FOODS.indexOf(f)+1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:1.4rem">${f.emoji}</span>
+          <div>
+            <div style="font-weight:700;font-size:.9rem">${f.name}</div>
+            <div style="font-size:.72rem;color:var(--text-muted)">${f.tags.join(' · ')}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="tbl-cat">${f.cat}</span></td>
+      <td class="tbl-price">${f.price.toLocaleString('vi-VN')}đ</td>
+      <td class="tbl-rating">⭐ ${f.rating}</td>
+      <td style="font-size:.82rem">${timeLabel[f.time]||f.time}</td>
+      <td style="font-size:.82rem">${budgetLabel[f.budget]||f.budget}</td>
+      <td style="font-size:.82rem;font-weight:700">${'●'.repeat(f.healthy)}<span style="color:#e5e7eb">${'●'.repeat(5-f.healthy)}</span> ${f.healthy}/5</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-edit" onclick="openAdminForm(${f.id})">✏️ Sửa</button>
+          <button class="btn-del" onclick="deleteFood(${f.id})">🗑️ Xoá</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+let editingFoodId=null;
+
+function openAdminForm(foodId){
+  editingFoodId=foodId;
+  document.getElementById('admin-form-title-text').textContent=foodId?'Chỉnh sửa món ăn':'Thêm món mới';
+  if(foodId){
+    const f=FOODS.find(x=>x.id===foodId);
+    if(!f)return;
+    document.getElementById('af-emoji').value=f.emoji;
+    document.getElementById('af-name').value=f.name;
+    document.getElementById('af-cat').value=f.cat;
+    document.getElementById('af-price').value=f.price;
+    document.getElementById('af-rating').value=f.rating;
+    document.getElementById('af-flavor').value=f.flavor;
+    document.getElementById('af-time').value=f.time;
+    document.getElementById('af-budget').value=f.budget;
+    document.getElementById('af-healthy').value=f.healthy;
+    document.getElementById('af-tags').value=f.tags.join(', ');
+  } else {
+    document.getElementById('af-emoji').value='';
+    document.getElementById('af-name').value='';
+    document.getElementById('af-cat').value='Cơm';
+    document.getElementById('af-price').value='';
+    document.getElementById('af-rating').value='4.5';
+    document.getElementById('af-flavor').value='mặn';
+    document.getElementById('af-time').value='nhanh';
+    document.getElementById('af-budget').value='mid';
+    document.getElementById('af-healthy').value='3';
+    document.getElementById('af-tags').value='';
+  }
+  document.getElementById('admin-modal').classList.add('show');
+}
+
+function closeAdminForm(){
+  document.getElementById('admin-modal').classList.remove('show');
+  editingFoodId=null;
+}
+
+function saveAdminForm(){
+  const emoji=document.getElementById('af-emoji').value.trim();
+  const name=document.getElementById('af-name').value.trim();
+  const cat=document.getElementById('af-cat').value;
+  const price=parseInt(document.getElementById('af-price').value);
+  const rating=parseFloat(document.getElementById('af-rating').value);
+  const flavor=document.getElementById('af-flavor').value;
+  const time=document.getElementById('af-time').value;
+  const budget=document.getElementById('af-budget').value;
+  const healthy=parseInt(document.getElementById('af-healthy').value);
+  const tags=document.getElementById('af-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  if(!emoji||!name||!price||isNaN(price)||isNaN(rating)){
+    alert('Vui lòng điền đầy đủ: Emoji, Tên món, Giá và Rating!');
+    return;
+  }
+  if(editingFoodId){
+    const idx=FOODS.findIndex(f=>f.id===editingFoodId);
+    if(idx>=0) FOODS[idx]={...FOODS[idx],emoji,name,cat,price,rating,tags,flavor,time,budget,healthy};
+  } else {
+    const newId=Math.max(...FOODS.map(f=>f.id))+1;
+    FOODS.push({id:newId,emoji,name,cat,price,rating,tags,flavor,time,budget,healthy});
+  }
+  saveFoods();
+  closeAdminForm();
+  renderAdminStats();
+  renderAdminCatFilter();
+  renderAdminTable();
+  renderGrid();
+  renderCats();
+}
+
+function deleteFood(foodId){
+  const f=FOODS.find(x=>x.id===foodId);
+  if(!f)return;
+  if(!confirm(`Xoá món "${f.name}"?\nHành động này không thể hoàn tác.`))return;
+  FOODS.splice(FOODS.findIndex(x=>x.id===foodId),1);
+  saveFoods();
+  renderAdminStats();
+  renderAdminCatFilter();
+  renderAdminTable();
+  renderGrid();
+  renderCats();
+}
+
+// ===== INIT =====
+renderCats();
+renderGrid();
+renderQuiz();
+
+// Check session
+if(currentUser){
+  loginSuccess(currentUser);
+}
+</script>
+
+
+<div id="toast-container"></div>
+<span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span></body></html>
